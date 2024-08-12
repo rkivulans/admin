@@ -15,7 +15,16 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('emails.index')" :active="request()->routeIs('emails')">
+                        {{ __('Mailboxes') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('aliases.index')" :active="request()->routeIs('aliases')">
+                        {{ __('Aliases') }}
+                    </x-nav-link>
                 </div>
+               
             </div>
 
             <!-- Settings Dropdown -->
@@ -69,6 +78,14 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('emails.index')" :active="request()->routeIs('emails')">
+                {{ __('Mailboxes') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('aliases.index')" :active="request()->routeIs('aliases')">
+                {{ __('Aliases') }}
             </x-responsive-nav-link>
         </div>
 
