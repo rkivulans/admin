@@ -16,15 +16,14 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('emails.index')" :active="request()->routeIs('emails')">
+                    <x-nav-link :href="route('emails.index')" :active="request()->routeIs('emails.index')">
                         {{ __('Mailboxes') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('aliases.index')" :active="request()->routeIs('aliases')">
+                    <x-nav-link :href="route('aliases.index')" :active="request()->routeIs('aliases.index')">
                         {{ __('Aliases') }}
                     </x-nav-link>
                 </div>
-               
             </div>
 
             <!-- Settings Dropdown -->
@@ -80,14 +79,16 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('emails.index')" :active="request()->routeIs('emails')">
+            <x-responsive-nav-link :href="route('emails.index')" :active="request()->routeIs('emails.index')">
                 {{ __('Mailboxes') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('aliases.index')" :active="request()->routeIs('aliases')">
+            <x-responsive-nav-link :href="route('aliases.index')" :active="request()->routeIs('aliases.index')">
                 {{ __('Aliases') }}
             </x-responsive-nav-link>
         </div>
+
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
