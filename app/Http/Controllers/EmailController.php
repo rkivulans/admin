@@ -2,13 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MailboxService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class EmailController extends Controller
 {
+    protected $mailboxService;
+
+    public function __construct(MailboxService $mailboxService)
+    {
+        $this->mailboxService = $mailboxService;
+    }
+
     public function index()
     {
+
+        /*
         $user = config('services.mailbox.user');
         $pw = config('services.mailbox.password');
         $server = config('services.mailbox.server');
@@ -17,6 +26,7 @@ class EmailController extends Controller
             ->withBasicAuth($user, $pw)
             ->get("$server/mail/users?format=json")
             ->object())[0]->users);
+            */
 
         /*
         $data = json_decode(<<<'JSON'
@@ -35,7 +45,7 @@ class EmailController extends Controller
         */
 
         return view('emails.index', [
-            'users' => $data->sortBy('email'),
+            'users' => $this->mailboxService->getEmailUsers()->sortBy('email'),
         ]);
     }
 
