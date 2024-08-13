@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 
 class EmailController extends Controller
 {
@@ -23,6 +24,34 @@ class EmailController extends Controller
 
         return view('emails.index', [
             'users' => $dati,
+        ]);
+    }
+
+    public function create(){
+
+        
+
+        return view('emails.create', [
+            
+        ]);
+    }
+
+
+    public function edit(Request $request){
+
+        
+        /*
+        $dati = json_decode(<<<'JSON'
+        [
+            { "email" : "bills@kecom.lv", "privileges": [ ], "status": "active" },
+            { "email" : "ext.lauris@kecom.lv", "privileges": [ ], "status": "active" }, 
+        ]
+    JSON);
+    */
+
+
+        return view('emails.edit', [
+            
         ]);
     }
 }
