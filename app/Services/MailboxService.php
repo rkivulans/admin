@@ -5,7 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
-class MailboxService
+class MailboxService implements MailboxServiceInterface
 {
     protected $user;
 

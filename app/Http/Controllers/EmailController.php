@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\MailboxService;
+use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
 
 class EmailController extends Controller
 {
     protected $mailboxService;
 
-    public function __construct(MailboxService $mailboxService)
+    public function __construct(MailboxServiceInterface $mailboxService)
     {
         $this->mailboxService = $mailboxService;
     }
