@@ -3,10 +3,7 @@
         <div class="flex justify-between">
             <h1 class="text-lg">Aliases</h1>
             <x-primary-button as="a" href="{{ route('aliases.create') }}">Create</x-primary-button>
-        </div> 
-        @dump($aliases)
-        <section class="mt-10">
-            <h2 class="text-lg font-semibold text-gray-900">Mails</h2>
+        </div>
 
             <div class="mt-4 flow-root">
                 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -40,6 +37,5 @@
                     </div>
                 </div>
             </div>
-        </section>
     </div>
 </x-app-layout>

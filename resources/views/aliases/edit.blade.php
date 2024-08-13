@@ -1,8 +1,17 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-            <h1 class="text-lg font-medium text-gray-900">Aliases</h1>
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+            <header>
+                <h2 class="text-lg font-medium text-gray-900">
+                    {{ __('Update Alias') }}
+                </h2>
 
-        <form method="post" action="{{ route('aliases.edit', ['alias' => $address]) }}" class="mt-4 space-y-4">
+                <p class="mt-1 text-sm text-gray-600">
+                    {{ __('Update the recipients that receive emails sent to this alias.') }}
+                </p>
+            </header>
+
+        <form method="post" action="{{ route('aliases.edit', ['alias' => $address]) }}" class="mt-6 space-y-6">
         @csrf
 
             <div>
@@ -19,5 +28,6 @@
                 <x-primary-button>{{ __('Update') }}</x-primary-button>
             </div>
         </form>
+        </div>
     </div>
 </x-app-layout>

@@ -1,15 +1,13 @@
 <x-app-layout>
-    <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <h1>Create email form</h1>
         <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <section>
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             <header>
                 <h2 class="text-lg font-medium text-gray-900">
                     {{ __('Add New Email') }}
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600">
-                    {{ __('Add a new email address to your account.') }}
+                    {{ __('Add a new email address to your domain.') }}
                 </p>
             </header>
 
@@ -23,7 +21,7 @@
                 </div>
 
                 <div>
-                    <x-input-label for="password" :value="__('New Password')" />
+                    <x-input-label for="password" :value="__('Password')" />
                     <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
@@ -52,7 +50,6 @@
                     @endif
                 </div>
             </form>
-        </section>
-    </div>
-    </div>
+            </div>
+        </div>
 </x-app-layout>
