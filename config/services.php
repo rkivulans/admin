@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'mailbox' => [
+        'user' => env('MAILADMIN_USER'),
+        'password' => env('MAILADMIN_PASSWORD'),
+        'server' => env('MAILADMIN_SERVER'),
+    ],
+
 ];

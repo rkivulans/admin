@@ -3,16 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class EmailController extends Controller
 {
     public function index()
     {
+        $user = config('services.mailbox.user');
+        $pw = config('services.mailbox.password');
+        $server = config('services.mailbox.server');
 
-        $dati = json_decode(<<<'JSON'
+        $data = collect((Http::withoutVerifying()
+            ->withBasicAuth($user, $pw)
+            ->get("$server/mail/users?format=json")
+            ->object())[0]->users);
+
+        /*
+        $data = json_decode(<<<'JSON'
             [
                 { "email" : "bills@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "ext.lauris@kecom.lv", "privileges": [ ], "status": "active" }, 
+                { "email" : "ext.lauris@kecom.lv", "privileges": [ ], "status": "active" },
                 { "email" : "ext.rihards@kecom.lv", "privileges": [ ], "status": "active" },
                 { "email" : "pve@kecom.lv", "privileges": [ ], "status": "active" },
                 { "email" : "gitea@kecom.lv", "privileges": [ ], "status": "active" },
@@ -22,9 +32,10 @@ class EmailController extends Controller
                 { "email" : "passit@kecom.lv", "privileges": [ ], "status": "active" }
             ]
         JSON);
+        */
 
         return view('emails.index', [
-            'users' => $dati,
+            'users' => $data->sortBy('email'),
         ]);
     }
 

@@ -19,13 +19,10 @@ class AliasController extends Controller
              ]
         JSON);
 
-        
-
         return view('aliases.index', [
             'aliases' => $dati,
         ]);
     }
-
 
     public function create()
     {
@@ -35,9 +32,9 @@ class AliasController extends Controller
 
     public function edit(Request $request)
     {
-        $address = "test@gmail.com"; 
-        $forwards_to = ["test2@gmail.com", "test3@gmail.com"]; 
-        	
+        $address = 'test@gmail.com';
+        $forwards_to = ['test2@gmail.com', 'test3@gmail.com'];
+
         return view('aliases.edit', [
             'address' => $address,
             'forwards_to' => $forwards_to,
