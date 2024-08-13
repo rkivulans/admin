@@ -25,7 +25,12 @@
                                             {{ $user->email }}
                                         </td>
                                         <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only"></span></a>
+                                        <a href="{{ route('emails.edit', ['email' => $user->email]) }}" class="text-indigo-600 hover:text-indigo-900">
+                                            Edit<span class="sr-only">, {{ $user->email }}</span>
+                                        </a>
+                                        <a href="{{ route('emails.create') }}" class="text-green-600 hover:text-green-900 ml-2">
+                                            Add Email<span class="sr-only">, New Email</span>
+                                        </a>
                                         </td>
                                     </tr>
                                 @endforeach
