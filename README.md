@@ -27,3 +27,4 @@ In parallel:
 Pre-commit: 
 
     ./vendor/bin/pint     # formats php files under app/
+    npm run format        # folmats js and blade.php under resources/views
