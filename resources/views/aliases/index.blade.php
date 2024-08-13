@@ -1,29 +1,10 @@
 <x-app-layout>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 class="text-lg font-medium text-gray-900">Aliases</h1>
+        <div class="flex justify-between">
+            <h1 class="text-lg">Aliases</h1>
+            <x-primary-button as="a" href="{{ route('aliases.create') }}">Create</x-primary-button>
+        </div> 
         @dump($aliases)
-        <section class="mt-8">
-            <h2 class="text-lg font-semibold text-gray-900">Add a mail alias</h2>
-
-            <form method="post" action="#" class="mt-4 space-y-4">
-                @csrf
-
-                <div>
-                    <x-input-label for="alias" :value="__('Alias')" />
-                    <x-text-input id="alias" name="alias" type="text" value="{{ Auth::user()->email }}" class="mt-1 block w-full" readonly />
-                </div>
-
-                <div>
-                    <x-input-label for="forwards_to" :value="__('Forwards To')" />
-                    <textarea id="forwards_to" name="forwards_to" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
-                </div>
-
-                <div>
-                    <x-primary-button>{{ __('Update') }}</x-primary-button>
-                </div>
-            </form>
-        </section>
-
         <section class="mt-10">
             <h2 class="text-lg font-semibold text-gray-900">Mails</h2>
 
@@ -49,7 +30,7 @@
                                                 @endforeach
                                             </td>
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {{ $alias->address_display }}</span></a>
+                                                <a href="{{ route('aliases.edit', ['alias' => $alias->address]) }}" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, {{ $alias->address_display }}</span></a>
                                             </td>
                                         </tr>
                                     @endforeach
