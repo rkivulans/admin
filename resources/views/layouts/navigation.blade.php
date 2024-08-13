@@ -23,14 +23,14 @@
 
                     <x-nav-link
                         :href="route('emails.index')"
-                        :active="request()->routeIs('emails.index')"
+                        :active="request()->routeIs('emails.*')"
                     >
                         {{ __("Mailboxes") }}
                     </x-nav-link>
 
                     <x-nav-link
                         :href="route('aliases.index')"
-                        :active="request()->routeIs('aliases.index')"
+                        :active="request()->routeIs('aliases.*')"
                     >
                         {{ __("Aliases") }}
                     </x-nav-link>

@@ -1,4 +1,9 @@
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __("Mailboxes") }}
+        </h2>
+    </x-slot>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
         <div class="flex justify-between">
             <h1 class="text-lg">Mailboxes</h1>
@@ -22,9 +27,7 @@
                                         scope="col"
                                         class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                     >
-                                        <a href="{{ route("emails.index") }}">
-                                            Emails
-                                        </a>
+                                        Emails
                                     </th>
                                     <th
                                         scope="col"
