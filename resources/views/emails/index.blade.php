@@ -1,6 +1,10 @@
 <x-app-layout>
-    <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">  
-        <h1 class="text-lg">Mailboxes</h1>
+    <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8"> 
+         <div class="flex justify-between">
+            <h1 class="text-lg">Mailboxes</h1>
+            <x-primary-button as="a" href="{{ route('emails.create') }}">Add email</x-primary-button>
+        </div> 
+        
         <div class="mt-8 flow-root">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -28,9 +32,7 @@
                                         <a href="{{ route('emails.edit', ['email' => $user->email]) }}" class="text-indigo-600 hover:text-indigo-900">
                                             Edit<span class="sr-only">, {{ $user->email }}</span>
                                         </a>
-                                        <a href="{{ route('emails.create') }}" class="text-green-600 hover:text-green-900 ml-2">
-                                            Add Email<span class="sr-only">, New Email</span>
-                                        </a>
+                                        
                                         </td>
                                     </tr>
                                 @endforeach
