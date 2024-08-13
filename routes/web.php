@@ -31,7 +31,7 @@ Route::resource('emails', EmailController::class)
     ->middleware(['auth', 'verified']);
 
 Route::resource('aliases', AliasController::class)
-    ->only(['index'])
+    ->only(['index', 'create', 'edit'])
     ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
