@@ -22,6 +22,22 @@
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
 
+                <div>
+                    <x-input-label for="password" :value="__('New Password')" />
+                    <x-text-input id="password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
+
+                <div>
+                    <x-input-label for="role" :value="__('Role')" />
+                    <select id="role" name="role" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="" disabled selected>Choose a role</option>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                    <x-input-error :messages="$errors->get('role')" class="mt-2" />
+                </div>
+
                 <div class="flex items-center gap-4">
                     <x-primary-button>{{ __('Add Email') }}</x-primary-button>
 
