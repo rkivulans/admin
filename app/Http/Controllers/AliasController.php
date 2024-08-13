@@ -35,12 +35,12 @@ class AliasController extends Controller
 
     public function edit(Request $request)
     {
-
-        $email = 'kristaps321@example.coom';
-
+        $address = "test@gmail.com"; 
+        $forwards_to = ["test2@gmail.com", "test3@gmail.com"]; 
+        	
         return view('aliases.edit', [
-            'email' => $email,
-
+            'address' => $address,
+            'forwards_to' => $forwards_to,
         ]);
     }
 }
