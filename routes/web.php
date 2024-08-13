@@ -19,7 +19,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 /*
 Route::middleware('auth')->group(function () {
     Route::get('/emails', [EmailController::class, 'index'])->name('emails');
@@ -27,16 +26,12 @@ Route::middleware('auth')->group(function () {
 });
 */
 
-
 Route::resource('emails', EmailController::class)
     ->only(['index', 'create', 'edit'])
     ->middleware(['auth', 'verified']);
 
-
 Route::resource('aliases', AliasController::class)
     ->only(['index'])
     ->middleware(['auth', 'verified']);
-
-
 
 require __DIR__.'/auth.php';
