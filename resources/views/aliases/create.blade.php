@@ -7,7 +7,7 @@
 
             <div>
                 <x-input-label for="alias" :value="__('Alias')" />
-                <x-text-input id="alias" name="alias" type="text" value="{{ Auth::user()->email }}" class="mt-1 block w-full" readonly />
+                <x-text-input id="alias" name="alias" type="text" class="mt-1 block w-full"/>
             </div>
 
             <div>
@@ -15,8 +15,8 @@
                 <textarea id="forwards_to" name="forwards_to" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
             </div>
 
-            <div>
-                <x-primary-button>{{ __('Update') }}</x-primary-button>
+            <div class="flex items-center justify-between">
+                <x-primary-button>{{ __('Create') }}</x-primary-button>
             </div>
         </form>
     </div>
