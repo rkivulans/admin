@@ -29,4 +29,14 @@ class MailboxService implements MailboxServiceInterface
 
         return collect($response[0]->users);
     }
+
+    public function getMailAliases(): Collection
+    {
+        $response = Http::withoutVerifying()
+            ->withBasicAuth($this->user, $this->password)
+            ->get("{$this->server}/mail/aliases?format=json")
+            ->object();
+
+        return collect($response[0]->aliases);
+    }
 }

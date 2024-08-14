@@ -3,25 +3,27 @@
 namespace App\Services;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 
 class DevMailboxService implements MailboxServiceInterface
 {
     public function getEmailUsers(): Collection
     {
-        $data = json_decode(<<<'JSON'
-            [
-                { "email" : "bills@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "ext.lauris@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "ext.rihards@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "pve@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "gitea@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "kristaps@kecom.lv", "privileges": [ "admin" ], "status": "active" },
-                { "email" : "leadcollect@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "odoo@kecom.lv", "privileges": [ ], "status": "active" },
-                { "email" : "passit@kecom.lv", "privileges": [ ], "status": "active" }
-            ]
+        $response = json_decode(<<<'JSON'
+            [{"domain":"devmail.ke.com.lv","users":[{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
         JSON);
 
-        return collect($data);
+        return collect($response[0]->users);
+    }
+
+    public function getMailAliases(): Collection
+    {
+
+        $response = json_decode(<<<'JSON'
+            [{"aliases":[{"address":"administrator@box.devmail.ke.com.lv","address_display":"administrator@box.devmail.ke.com.lv","auto":false,"forwards_to":["kristaps@devmail.ke.com.lv", "kristapsTEST@devmail.ke.com.lv", "kristapsTEST2@devmail.ke.com.lv"],"permitted_senders":null},{"address":"abuse@box.devmail.ke.com.lv","address_display":"abuse@box.devmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv", "adminTEST@inbox.lv"],"permitted_senders":null},{"address":"admin@box.devmail.ke.com.lv","address_display":"admin@box.devmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"hostmaster@box.devmail.ke.com.lv","address_display":"hostmaster@box.devmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"postmaster@box.devmail.ke.com.lv","address_display":"postmaster@box.devmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null}],"domain":"box.devmail.ke.com.lv"},{"aliases":[{"address":"info@devmail.ke.com.lv","address_display":"info@devmail.ke.com.lv","auto":false,"forwards_to":["kristaps@devmail.ke.com.lv","rihards@devmail.ke.com.lv"],"permitted_senders":null},{"address":"prakse@devmail.ke.com.lv","address_display":"prakse@devmail.ke.com.lv","auto":false,"forwards_to":["lauris@laurismail.ke.com.lv","rihards@rihardsmail.ke.com.lv"],"permitted_senders":null},{"address":"abuse@devmail.ke.com.lv","address_display":"abuse@devmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"admin@devmail.ke.com.lv","address_display":"admin@devmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"postmaster@devmail.ke.com.lv","address_display":"postmaster@devmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null}],"domain":"devmail.ke.com.lv"},{"aliases":[{"address":"info@extramail.ke.com.lv","address_display":"info@extramail.ke.com.lv","auto":false,"forwards_to":["kristaps@devmail.ke.com.lv"],"permitted_senders":null},{"address":"abuse@extramail.ke.com.lv","address_display":"abuse@extramail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"admin@extramail.ke.com.lv","address_display":"admin@extramail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"postmaster@extramail.ke.com.lv","address_display":"postmaster@extramail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null}],"domain":"extramail.ke.com.lv"},{"aliases":[{"address":"abuse@laurismail.ke.com.lv","address_display":"abuse@laurismail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"admin@laurismail.ke.com.lv","address_display":"admin@laurismail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"postmaster@laurismail.ke.com.lv","address_display":"postmaster@laurismail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null}],"domain":"laurismail.ke.com.lv"},{"aliases":[{"address":"abuse@rihardsmail.ke.com.lv","address_display":"abuse@rihardsmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"admin@rihardsmail.ke.com.lv","address_display":"admin@rihardsmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"postmaster@rihardsmail.ke.com.lv","address_display":"postmaster@rihardsmail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null}],"domain":"rihardsmail.ke.com.lv"},{"aliases":[{"address":"info@supermail.ke.com.lv","address_display":"info@supermail.ke.com.lv","auto":false,"forwards_to":["user@supermail.ke.com.lv"],"permitted_senders":null},{"address":"abuse@supermail.ke.com.lv","address_display":"abuse@supermail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"admin@supermail.ke.com.lv","address_display":"admin@supermail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null},{"address":"postmaster@supermail.ke.com.lv","address_display":"postmaster@supermail.ke.com.lv","auto":true,"forwards_to":["administrator@box.devmail.ke.com.lv"],"permitted_senders":null}],"domain":"supermail.ke.com.lv"}]
+         JSON
+        );
+
+        return collect($response[0]->aliases);
     }
 }
