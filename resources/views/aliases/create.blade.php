@@ -20,11 +20,7 @@
                 </p>
             </header>
 
-            <form
-                method="post"
-                action="{{ route("aliases.create") }}"
-                class="mt-6 space-y-6"
-            >
+            <form method="POST" action="{{ route('aliases.store') }}" class="mt-6 space-y-6">
                 @csrf
 
                 <div>
@@ -34,25 +30,33 @@
                         name="alias"
                         type="text"
                         class="mt-1 block w-full"
+                        value="{{ old('alias') }}"
                     />
+                    @error('alias')
+                        <div class="text-red-600 mt-2 text-sm">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div>
-                    <x-input-label
-                        for="forwards_to"
-                        :value="__('Forwards To')"
-                    />
+                    <x-input-label for="forwards_to" :value="__('Forwards To')" />
                     <textarea
                         id="forwards_to"
                         name="forwards_to"
                         rows="3"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    ></textarea>
+                    >{{ old('forwards_to') }}</textarea>
+                    @error('forwards_to')
+                        <div class="text-red-600 mt-2 text-sm">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="flex items-center justify-between">
                     <x-primary-button>{{ __("Create") }}</x-primary-button>
                 </div>
+
+                @if (session('success'))
+                    <p class="text-green-600 mt-4">{{ session('success') }}</p>
+                @endif
             </form>
         </div>
     </div>

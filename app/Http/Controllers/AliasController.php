@@ -28,6 +28,16 @@ class AliasController extends Controller
         return view('aliases.create', []);
     }
 
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'alias' => 'required|string|max:255',
+            'forwards_to' => 'required|string',
+        ]);
+        
+        return redirect()->route('aliases.create')->with('success', 'Alias created successfully!');
+    }
+
     public function edit(Request $request)
     {
         $address = 'test@gmail.com';
@@ -37,5 +47,14 @@ class AliasController extends Controller
             'address' => $address,
             'forwards_to' => $forwards_to,
         ]);
+    }
+
+    public function update(Request $request, $alias): RedirectResponse
+    {
+        $validated = $request->validate([
+            'forwards_to' => 'required|string',
+        ]);
+        
+        return redirect()->route('aliases.edit', ['alias' => $alias])->with('success', 'Alias updated successfully!');
     }
 }

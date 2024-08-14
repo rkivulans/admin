@@ -57,6 +57,17 @@ class EmailController extends Controller
         ]);
     }
 
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+            'role' => 'required|string',
+        ]);
+
+        return redirect()->route('emails.create')->with('success', 'Form submitted successfully!');
+    }
+
     public function edit(Request $request)
     {
 
