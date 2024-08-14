@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Http;
 
 class DevMailboxService implements MailboxServiceInterface
 {
@@ -25,5 +24,10 @@ class DevMailboxService implements MailboxServiceInterface
         );
 
         return collect($response[0]->aliases);
+    }
+
+    public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
+    {
+        return true;
     }
 }
