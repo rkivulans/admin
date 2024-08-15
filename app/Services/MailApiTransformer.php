@@ -8,7 +8,7 @@ class MailApiTransformer
 {
     public function __construct(protected MailboxServiceInterface $mailboxService) {}
 
-    public function getUsers(array $domains): Collection
+    public function getUsers(array $domains = []): Collection
     {
         $usersFromMailboxApi = $this->mailboxService->getMailUsers();
         // $usersFromMailboxApi = [{"domain":"devmail.ke.com.lv","users":[{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}, {"email":"test@devmail.ke.com.lv", "mailbox": "/home/user-data/mail/mailboxes/devmail.ke.com.lv/test", "privileges":[],"status":"inactive"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
@@ -17,6 +17,7 @@ class MailApiTransformer
 
         // $transformedUserList = [{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}, {"email":"test@devmail.ke.com.lv", "mailbox": "/home/user-data/mail/mailboxes/devmail.ke.com.lv/test", "privileges":[],"status":"inactive"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
 
-        return $transformedUserList;
+        //return $transformedUserList;
+        return collect($usersFromMailboxApi[0]->users);
     }
 }
