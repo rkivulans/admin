@@ -20,12 +20,9 @@
                 </p>
             </header>
 
-            <form
-                method="post"
-                action="{{ route("aliases.edit", ["alias" => $address]) }}"
-                class="mt-6 space-y-6"
-            >
+            <form method="POST" action="{{ route('aliases.update', ['alias' => $address]) }}" class="mt-6 space-y-6">
                 @csrf
+                @method('PUT')
 
                 <div>
                     <x-input-label for="alias" :value="__('Alias')" />
@@ -40,23 +37,23 @@
                 </div>
 
                 <div>
-                    <x-input-label
-                        for="forwards_to"
-                        :value="__('Forwards To')"
-                    />
+                    <x-input-label for="forwards_to" :value="__('Forwards To')" />
                     <textarea
                         id="forwards_to"
                         name="forwards_to"
                         rows="3"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    >
-{{ implode(", ", $forwards_to) }}</textarea
-                    >
+                    >{{ old('forwards_to', implode(", ", $forwards_to)) }}</textarea>
+                    <x-input-error :messages="$errors->get('forwards_to')" class="mt-2" />
                 </div>
 
                 <div class="flex items-center justify-between">
                     <x-primary-button>{{ __("Update") }}</x-primary-button>
                 </div>
+
+                @if (session('success'))
+                    <p class="text-green-600 mt-4">{{ session('success') }}</p>
+                @endif
             </form>
         </div>
     </div>

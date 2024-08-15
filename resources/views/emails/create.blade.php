@@ -20,11 +20,7 @@
                 </p>
             </header>
 
-            <form
-                method="get"
-                action="{{ route("emails.index") }}"
-                class="mt-6 space-y-6"
-            >
+            <form method="POST" action="{{ route('emails.store') }}" class="mt-6 space-y-6">
                 @csrf
 
                 <div>
@@ -32,13 +28,11 @@
                     <x-text-input
                         id="email"
                         name="email"
-                        type="email"
+                        type="text"
                         class="mt-1 block w-full"
-                        autocomplete="email"
+                        value="{{ old('email') }}"
                     />
-                    <x-input-error
-                        :messages="$errors->get('email')"
-                        class="mt-2"
+                    <x-input-error :messages="$errors->get('email')" class="mt-2"
                     />
                 </div>
 
@@ -51,9 +45,7 @@
                         class="mt-1 block w-full"
                         autocomplete="new-password"
                     />
-                    <x-input-error
-                        :messages="$errors->get('password')"
-                        class="mt-2"
+                    <x-input-error :messages="$errors->get('password')" class="mt-2"
                     />
                 </div>
 
@@ -67,12 +59,11 @@
                         <option value="" disabled selected>
                             Choose a role
                         </option>
-                        <option value="user">User</option>
-                        <option value="admin">Admin</option>
+                        <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
+                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
-                    <x-input-error
-                        :messages="$errors->get('role')"
-                        class="mt-2"
+                    
+                    <x-input-error :messages="$errors->get('role')" class="mt-2"
                     />
                 </div>
 
@@ -80,19 +71,11 @@
                     <x-primary-button>
                         {{ __("Add Email") }}
                     </x-primary-button>
-
-                    @if (session("status") === "email-added")
-                        <p
-                            x-data="{ show: true }"
-                            x-show="show"
-                            x-transition
-                            x-init="setTimeout(() => (show = false), 2000)"
-                            class="text-sm text-gray-600"
-                        >
-                            {{ __("Added.") }}
-                        </p>
-                    @endif
                 </div>
+
+                @if (session('success'))
+                    <p class="text-green-600 mt-4">{{ session('success') }}</p>
+                @endif
             </form>
         </div>
     </div>

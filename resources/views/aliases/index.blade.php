@@ -45,7 +45,7 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($aliases as $alias)
-                                    <tr>
+                                    <tr @if ($alias->address_display == session('lastId')) class="bg-gray-50" @endif>
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
                                         >
