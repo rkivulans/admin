@@ -30,4 +30,15 @@ class DevMailboxService implements MailboxServiceInterface
     {
         return true;
     }
+
+    public function addOrUpdateMailAlias(string $address, string $forwards_to, ?string $permitted_senders = null, int $update_if_exists = 0)
+    {
+        return true;
+    }
+
+
+    public function setMailUserPassword(string $email, string $password)
+    {
+        return true;
+    }
 }

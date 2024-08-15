@@ -44,13 +44,12 @@ class MailboxService implements MailboxServiceInterface
 
         return collect($response->object()[0]->aliases);
     }
-    // https://{host}/admin/mail/users/add
 
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
     {
         $response = $this->httpCall()
             ->asForm()    ///->dd()
-            ->post('{+endpoint}/mail/users/add}', [
+            ->post('{+endpoint}/mail/users/add', [
                 'email' => $email,
                 'password' => $password,
                 'privileges' => $privilege->value,
@@ -58,4 +57,35 @@ class MailboxService implements MailboxServiceInterface
 
         return $response; /// need to delete this line after
     }
+
+
+      /// on update update_if_exists = 1, by default = 0
+      /// on update permitted_users = string (with emails), by default null
+    public function addOrUpdateMailAlias(string $address, string $forwards_to, ?string $permitted_senders = null, int $update_if_exists = 0)
+    {
+        $response = $this->httpCall()
+            ->asForm()    
+            ->post('{+endpoint}/mail/aliases/add', [
+                'update_if_exists' => $update_if_exists,
+                'address' => $address,
+                'forwards_to' => $forwards_to,
+                'permitted_senders' => $permitted_senders,
+            ]);
+
+        return $response; /// delete
+    }
+
+    public function setMailUserPassword(string $email, string $password)
+    {
+        $response = $this->httpCall()
+            ->asForm()    
+            ->post('{+endpoint}/mail/users/password', [
+                'email' => $email,
+                'password' => $password,
+            ]);
+
+        return $response; // delete
+    }
+
+    
 }
