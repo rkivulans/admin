@@ -45,6 +45,19 @@ class MailboxService implements MailboxServiceInterface
         return collect($response->object()[0]->aliases);
     }
 
+    public function getAllDomains(): Collection
+    {
+        
+        $response = $this->httpCall()
+            ->get('{+endpoint}/mail/domains');
+            
+        
+        //dd($response[0]->collect());
+        
+        return $response->collect();
+        
+    }
+
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
     {
         $response = $this->httpCall()
@@ -87,5 +100,52 @@ class MailboxService implements MailboxServiceInterface
         return $response; // delete
     }
 
+
+    public function removeMailUser(string $email)
+    {
+        $response = $this->httpCall()
+            ->asForm()    
+            ->post('{+endpoint}/mail/users/remove', [
+                'email' => $email,
+            ]);
+
+        return $response; // delete
+    }
+
+    public function removeMailAlias(string $address)
+    {
+        $response = $this->httpCall()
+            ->asForm()    
+            ->post('{+endpoint}/mail/aliases/remove', [
+                'address' => $address,
+            ]);
+
+        return $response; // delete
+    }
     
+    // by default add privilege = admin;
+    public function addMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
+    {
+        $response = $this->httpCall()
+            ->asForm()    
+            ->post('{+endpoint}/mail/users/privileges/add', [
+                'email' => $email,
+                'privilege' => $privilege->value
+            ]);
+
+        return $response; // delete
+    }
+
+    // by default remove privilege = admin;
+    public function removeMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
+    {
+        $response = $this->httpCall()
+            ->asForm()    
+            ->post('{+endpoint}/mail/users/privileges/remove', [
+                'email' => $email,
+                'privilege' => $privilege->value
+            ]);
+
+        return $response; // delete
+    }
 }

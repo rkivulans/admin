@@ -26,6 +26,13 @@ class DevMailboxService implements MailboxServiceInterface
         return collect($response[0]->aliases);
     }
 
+    public function getAllDomains(): Collection
+    {
+
+        // this needs to be edited
+        return collect();
+    }
+
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
     {
         return true;
@@ -38,6 +45,27 @@ class DevMailboxService implements MailboxServiceInterface
 
 
     public function setMailUserPassword(string $email, string $password)
+    {
+        return true;
+    }
+
+    public function removeMailUser(string $email)
+    {
+        return true;
+    }
+
+
+    public function removeMailAlias(string $address)
+    {
+        return true;
+    }
+
+    public function addMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
+    {
+        return true;
+    }
+
+    public function removeMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
     {
         return true;
     }
