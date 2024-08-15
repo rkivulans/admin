@@ -7,7 +7,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-
 class MailboxService implements MailboxServiceInterface
 {
     protected $user;
@@ -36,7 +35,7 @@ class MailboxService implements MailboxServiceInterface
         $response = $this->httpCall()
             ->get('{+endpoint}/mail/users?format=json');
 
-        return collect($response->object()[0]->users);
+        return collect($response->object());
     }
 
     public function getMailAliases(): Collection
@@ -44,19 +43,19 @@ class MailboxService implements MailboxServiceInterface
         $response = $this->httpCall()
             ->get('{+endpoint}/mail/aliases?format=json');
 
-        return collect($response->object()[0]->aliases);
+        return collect($response->object());
     }
 
     public function getAllDomains(): Collection
     {
-        
+
         $response = $this->httpCall()
             ->get('{+endpoint}/mail/domains');
-        
+
         $domains = Str::of($response->body())->trim()->explode("\n");
-        
+
         return $domains->collect();
-        
+
     }
 
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
@@ -72,15 +71,14 @@ class MailboxService implements MailboxServiceInterface
         return $response; /// need to delete this line after
     }
 
-
-      /// on update update_if_exists = 1, by default = 0
-      /// on update permitted_users = string (with emails), by default null
+    /// on update update_if_exists = 1, by default = 0
+    /// on update permitted_users = string (with emails), by default null
     public function addOrUpdateMailAlias(string $address, string $forwardsTo, ?string $permittedSenders = null, int $updateIfExists = 0)
     {
         $response = $this->httpCall()
-            ->asForm()    
+            ->asForm()
             ->post('{+endpoint}/mail/aliases/add', [
-            
+
                 'update_if_exists' => $updateIfExists,
                 'address' => $address,
                 'forwards_to' => $forwardsTo,
@@ -93,7 +91,7 @@ class MailboxService implements MailboxServiceInterface
     public function setMailUserPassword(string $email, string $password)
     {
         $response = $this->httpCall()
-            ->asForm()    
+            ->asForm()
             ->post('{+endpoint}/mail/users/password', [
                 'email' => $email,
                 'password' => $password,
@@ -102,11 +100,10 @@ class MailboxService implements MailboxServiceInterface
         return $response; // delete
     }
 
-
     public function removeMailUser(string $email)
     {
         $response = $this->httpCall()
-            ->asForm()    
+            ->asForm()
             ->post('{+endpoint}/mail/users/remove', [
                 'email' => $email,
             ]);
@@ -117,22 +114,22 @@ class MailboxService implements MailboxServiceInterface
     public function removeMailAlias(string $address)
     {
         $response = $this->httpCall()
-            ->asForm()    
+            ->asForm()
             ->post('{+endpoint}/mail/aliases/remove', [
                 'address' => $address,
             ]);
 
         return $response; // delete
     }
-    
+
     // by default add privilege = admin;
     public function addMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
     {
         $response = $this->httpCall()
-            ->asForm()    
+            ->asForm()
             ->post('{+endpoint}/mail/users/privileges/add', [
                 'email' => $email,
-                'privilege' => $privilege->value
+                'privilege' => $privilege->value,
             ]);
 
         return $response; // delete
@@ -142,10 +139,10 @@ class MailboxService implements MailboxServiceInterface
     public function removeMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
     {
         $response = $this->httpCall()
-            ->asForm()    
+            ->asForm()
             ->post('{+endpoint}/mail/users/privileges/remove', [
                 'email' => $email,
-                'privilege' => $privilege->value
+                'privilege' => $privilege->value,
             ]);
 
         return $response; // delete

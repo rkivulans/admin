@@ -11,8 +11,8 @@ class DevMailboxService implements MailboxServiceInterface
         $response = json_decode(<<<'JSON'
             [{"domain":"devmail.ke.com.lv","users":[{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}, {"email":"test@devmail.ke.com.lv", "mailbox": "/home/user-data/mail/mailboxes/devmail.ke.com.lv/test", "privileges":[],"status":"inactive"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
         JSON);
-        
-        return collect($response[0]->users);
+
+        return collect($response);
     }
 
     public function getMailAliases(): Collection
@@ -23,18 +23,18 @@ class DevMailboxService implements MailboxServiceInterface
          JSON
         );
 
-        return collect($response[0]->aliases);
+        return collect($response);
     }
 
     public function getAllDomains(): Collection
     {
         $response = [
-            "box.devmail.ke.com.lv",
-            "rihardsmail.ke.com.lv",
-            "laurismail.ke.com.lv",
-            "devmail.ke.com.lv",
-            "supermail.ke.com.lv",
-            "extramail.ke.com.lv",
+            'box.devmail.ke.com.lv',
+            'rihardsmail.ke.com.lv',
+            'laurismail.ke.com.lv',
+            'devmail.ke.com.lv',
+            'supermail.ke.com.lv',
+            'extramail.ke.com.lv',
         ];
 
         return collect($response);
@@ -50,7 +50,6 @@ class DevMailboxService implements MailboxServiceInterface
         return true;
     }
 
-
     public function setMailUserPassword(string $email, string $password)
     {
         return true;
@@ -60,7 +59,6 @@ class DevMailboxService implements MailboxServiceInterface
     {
         return true;
     }
-
 
     public function removeMailAlias(string $address)
     {
