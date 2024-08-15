@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class AliasController extends Controller
 {
@@ -34,8 +35,10 @@ class AliasController extends Controller
             'alias' => 'required|email|max:255',
             'forwards_to' => 'required|string',
         ]);
-        
-        return redirect()->route('aliases.create')->with('success', 'Alias created successfully!');
+
+        return redirect()->route('aliases.index')
+            ->with('success', 'Alias ' . $validated['alias'] . ' created successfully!')
+            ->with('lastId', $validated['alias']);
     }
 
     public function edit(Request $request)
@@ -54,7 +57,7 @@ class AliasController extends Controller
         $validated = $request->validate([
             'forwards_to' => 'required|string',
         ]);
-        
+
         return redirect()->route('aliases.edit', ['alias' => $alias])->with('success', 'Alias updated successfully!');
     }
 }

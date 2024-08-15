@@ -51,9 +51,6 @@
                     <x-primary-button>{{ __("Create") }}</x-primary-button>
                 </div>
 
-                @if (session('success'))
-                    <p class="text-green-600 mt-4">{{ session('success') }}</p>
-                @endif
             </form>
         </div>
     </div>
