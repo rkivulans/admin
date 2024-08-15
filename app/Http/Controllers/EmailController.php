@@ -60,7 +60,7 @@ class EmailController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
             'role' => 'required|string',
         ]);

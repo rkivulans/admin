@@ -32,9 +32,8 @@
                         class="mt-1 block w-full"
                         value="{{ old('alias') }}"
                     />
-                    @error('alias')
-                        <div class="text-red-600 mt-2 text-sm">{{ $message }}</div>
-                    @enderror
+                    <x-input-error :messages="$errors->get('alias')" class="mt-2"
+                    />
                 </div>
 
                 <div>
@@ -45,9 +44,7 @@
                         rows="3"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                     >{{ old('forwards_to') }}</textarea>
-                    @error('forwards_to')
-                        <div class="text-red-600 mt-2 text-sm">{{ $message }}</div>
-                    @enderror
+                    <x-input-error :messages="$errors->get('forwards_to')" class="mt-2" />
                 </div>
 
                 <div class="flex items-center justify-between">

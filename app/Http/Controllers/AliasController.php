@@ -31,7 +31,7 @@ class AliasController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'alias' => 'required|string|max:255',
+            'alias' => 'required|email|max:255',
             'forwards_to' => 'required|string',
         ]);
         

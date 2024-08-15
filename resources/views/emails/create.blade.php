@@ -28,14 +28,12 @@
                     <x-text-input
                         id="email"
                         name="email"
-                        type="email"
+                        type="text"
                         class="mt-1 block w-full"
-                        autocomplete="email"
                         value="{{ old('email') }}"
                     />
-                    @error('email')
-                        <div class="text-red-600 mt-2 text-sm">{{ $message }}</div>
-                    @enderror
+                    <x-input-error :messages="$errors->get('email')" class="mt-2"
+                    />
                 </div>
 
                 <div>
@@ -47,9 +45,8 @@
                         class="mt-1 block w-full"
                         autocomplete="new-password"
                     />
-                    @error('password')
-                        <div class="text-red-600 mt-2 text-sm">{{ $message }}</div>
-                    @enderror
+                    <x-input-error :messages="$errors->get('password')" class="mt-2"
+                    />
                 </div>
 
                 <div>
@@ -65,9 +62,9 @@
                         <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
                         <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
-                    @error('role')
-                        <div class="text-red-600 mt-2 text-sm">{{ $message }}</div>
-                    @enderror
+                    
+                    <x-input-error :messages="$errors->get('role')" class="mt-2"
+                    />
                 </div>
 
                 <div class="flex items-center gap-4">
