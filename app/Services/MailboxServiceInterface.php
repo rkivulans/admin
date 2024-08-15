@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 
 interface MailboxServiceInterface
 {
-    public function getEmailUsers(): Collection;
+    public function getMailUsers(): Collection;
 
     public function getMailAliases(): Collection;
 

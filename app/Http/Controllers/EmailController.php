@@ -45,7 +45,7 @@ class EmailController extends Controller
         */
 
         return view('emails.index', [
-            'users' => $this->mailboxService->getEmailUsers()->sortBy('email'),
+            'users' => $this->mailboxService->getMailUsers()->sortBy('email'),
         ]);
     }
 

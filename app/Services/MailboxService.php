@@ -5,6 +5,8 @@ namespace App\Services;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+
 
 class MailboxService implements MailboxServiceInterface
 {
@@ -29,7 +31,7 @@ class MailboxService implements MailboxServiceInterface
             ]);
     }
 
-    public function getEmailUsers(): Collection
+    public function getMailUsers(): Collection
     {
         $response = $this->httpCall()
             ->get('{+endpoint}/mail/users?format=json');
@@ -50,11 +52,10 @@ class MailboxService implements MailboxServiceInterface
         
         $response = $this->httpCall()
             ->get('{+endpoint}/mail/domains');
-            
         
-        //dd($response[0]->collect());
+        $domains = Str::of($response->body())->trim()->explode("\n");
         
-        return $response->collect();
+        return $domains->collect();
         
     }
 
@@ -74,15 +75,16 @@ class MailboxService implements MailboxServiceInterface
 
       /// on update update_if_exists = 1, by default = 0
       /// on update permitted_users = string (with emails), by default null
-    public function addOrUpdateMailAlias(string $address, string $forwards_to, ?string $permitted_senders = null, int $update_if_exists = 0)
+    public function addOrUpdateMailAlias(string $address, string $forwardsTo, ?string $permittedSenders = null, int $updateIfExists = 0)
     {
         $response = $this->httpCall()
             ->asForm()    
             ->post('{+endpoint}/mail/aliases/add', [
-                'update_if_exists' => $update_if_exists,
+            
+                'update_if_exists' => $updateIfExists,
                 'address' => $address,
-                'forwards_to' => $forwards_to,
-                'permitted_senders' => $permitted_senders,
+                'forwards_to' => $forwardsTo,
+                'permitted_senders' => $permittedSenders,
             ]);
 
         return $response; /// delete
