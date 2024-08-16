@@ -14,8 +14,8 @@ test('that list of mailboxes is returned', function () {
     ]);
 
     $expectedResult = collect([
-        ["email"=>"user1@domain1.example.com"],
-        ["email"=>"user2@domain1.example.com"],
+        (object)["email"=>"user1@domain1.example.com"],
+        (object)["email"=>"user2@domain1.example.com"],
     ]);
 
     $mailboxService = Mockery::mock(MailboxServiceInterface::class);
@@ -28,31 +28,31 @@ test('that list of mailboxes is returned', function () {
 
 test('that mailboxes are filtered by domains', function () {
     $apiResponse = collect([
-        [
+        (object)[
             "domain" => "domain1.example.com",
             "users" => [
-                ["email"=>"userAA@domain1.example.com"],
-                ["email"=>"userBB@domain1.example.com"],
+                (object)["email"=>"userAA@domain1.example.com"],
+                (object)["email"=>"userBB@domain1.example.com"],
             ]
         ],
-        [
+        (object)[
             "domain" => "domain2.example.com",
             "users" => [
-                ["email"=>"userCC@domain1.example.com"],
+                (object)["email"=>"userCC@domain2.example.com"],
             ]
         ],
-        [
+        (object)[
             "domain" => "domain3.example.com",
             "users" => [
-                ["email"=>"userDD@domain1.example.com"],
+                (object)["email"=>"userDD@domain3.example.com"],
             ]
         ],
     ]);
 
     $expectedResult = collect([
-        ["email"=>"userAA@domain1.example.com"],
-        ["email"=>"userBB@domain1.example.com"],
-        ["email"=>"userDD@domain3.example.com"],
+        (object)["email"=>"userAA@domain1.example.com"],
+        (object)["email"=>"userBB@domain1.example.com"],
+        (object)["email"=>"userDD@domain3.example.com"],
     ]);
 
 
