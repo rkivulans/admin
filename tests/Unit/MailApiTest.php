@@ -176,3 +176,38 @@ test('return filtered domains', function () {
     expect($api->getDomains(['laurismail.ke.com.lv', 'devmail.ke.com.lv'])->toArray())
         ->toEqual($expectedResult->toArray());
 });
+
+
+
+
+
+/*
+ //////// Sis tests jau laikam nederes jo nav jau tads api calls uz vienu useri...
+ Jo ka tad es varu vispar parbaudit, vai ari es kko nepareizi sapratu.
+
+test('if return user is not null', function () {
+    $apiResponse =  collect([
+        (object) [
+            'domain' => 'domain1.example.com',
+            'users' => [
+                (object) ['email' => 'userAA@domain1.example.com'],
+                (object) ['email' => 'userBB@domain1.example.com'],
+            ],
+        ],
+        (object) [
+            'domain' => 'domain2.example.com',
+            'users' => [
+                (object) ['email' => 'userCC@domain2.example.com'],
+            ],
+        ],
+    ]);
+
+
+    $mailboxService = Mockery::mock(MailboxServiceInterface::class);
+    $mailboxService->shouldReceive('getMailbox')->andReturn($apiResponse);
+    $api = new MailApiTransformer($mailboxService);
+
+    expect($api->getMailbox([])->toArray())
+        ->toEqual($expectedResult->toArray());
+});
+*/

@@ -29,13 +29,24 @@ class MailApiTransformer
     public function getDomains(array $domains = []): Collection
     {
         return $this->mailboxService->getAllDomains()
-            ->filter(fn ($domain) => $this->domainFilter($domain, $domains));
+        ->filter(fn ($domain) => $this->domainFilter($domain, $domains));
     }
 
+    ///// Drosvien nepareizi sapratu ka bija domats, pagaidam atstaju sadi
+    public function getMailbox(string $email, array $allowedDomains = []): Collection{
 
-    public function getMailbox(string $email, array $allowedDomains){
-        return $this->getUsers($allowedDomains)
+        return !count($allowedDomains) ? null : 
+        $this->getUsers($allowedDomains)
         ->whereIn('email', [$email])
+        ->first();
+    }
+
+     ///// Drosvien nepareizi sapratu ka bija domats, pagaidam atstaju sadi
+    public function getAlias(string $address, array $allowedDomains){
+
+        return !count($allowedDomains) ? null : 
+        $this->getAliases($allowedDomains)
+        ->whereIn('address', [$address])
         ->first();
     }
 
