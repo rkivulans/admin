@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class MailApiTransformer
@@ -11,32 +10,37 @@ class MailApiTransformer
 
     public function getUsers(array $domains = []): Collection
     {
-       // $usersFromMailboxApi = $this->mailboxService->getMailUsers();
-        // $usersFromMailboxApi = [{"domain":"devmail.ke.com.lv","users":[{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}, {"email":"test@devmail.ke.com.lv", "mailbox": "/home/user-data/mail/mailboxes/devmail.ke.com.lv/test", "privileges":[],"status":"inactive"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
-
-        //... here we do magic... with collection...
-
-        // $transformedUserList = [{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}, {"email":"test@devmail.ke.com.lv", "mailbox": "/home/user-data/mail/mailboxes/devmail.ke.com.lv/test", "privileges":[],"status":"inactive"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
-
-      //  return $transformedUserList;
-
         $transformedUserList = $this->mailboxService->getMailUsers()
-        ->filter(fn($data) => $this->domainFilter($data, $domains))
-        ->flatMap(fn($data) => $data->users);
+            ->filter(fn ($data) => $this->domainFilter($data->domain, $domains))
+            ->flatMap(fn ($data) => $data->users);
 
         return $transformedUserList;
     }
 
-    public function getAliases(array $domains = []): Collection {
+    public function getAliases(array $domains = []): Collection
+    {
         $transformedAlisasList = $this->mailboxService->getMailAliases()
-        ->filter(fn($data) => $this->domainFilter($data, $domains))
-        ->flatMap(fn($data) => $data->aliases);
+            ->filter(fn ($data) => $this->domainFilter($data->domain, $domains))
+            ->flatMap(fn ($data) => $data->aliases);
 
         return $transformedAlisasList;
     }
 
+    public function getDomains(array $domains = []): Collection
+    {
+        return $this->mailboxService->getAllDomains()
+            ->filter(fn ($domain) => $this->domainFilter($domain, $domains));
+    }
 
-    private function domainFilter($data, $domains){
-      return count($domains) ? in_array($data->domain, $domains) : $data;
+
+    public function getMailbox(string $email, array $allowedDomains){
+        return $this->getUsers($allowedDomains)
+        ->whereIn('email', [$email])
+        ->first();
+    }
+
+    private function domainFilter($data, $domains)
+    {
+        return count($domains) ? in_array($data, $domains) : $data;
     }
 }
