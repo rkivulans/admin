@@ -6,6 +6,7 @@ use App\Services\MailApiTransformer;
 use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\Rule;
 
 class EmailController extends Controller
 {
@@ -42,7 +43,7 @@ class EmailController extends Controller
         $validated = $request->validate([
             'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
-            'role' => 'required|string',
+            'role' => ['required', 'string', Rule::in(['user', 'admin'])], // Pārbauda, vai lomas vērtība ir "user" vai "admin"
         ]);
         
         return redirect()->route('emails.index')
@@ -52,21 +53,20 @@ class EmailController extends Controller
 
     public function edit(Request $request, $user)
     {
-
-        $email = 'kristaps321@example.coom';
-
-        return view('emails.edit', ['email' => $email,
-
+        // Atgriež skatu 'emails.edit
+        return view('emails.edit', [
+            'email' => $user,
         ]);
     }
 
     public function update(Request $request, $user): RedirectResponse
     {
+        // Validē paroli (obligāta, vismaz 8 rakstzīmes)
         $validated = $request->validate([
-            'email' => 'required|email',
             'password' => 'required|string|min:8',
         ]);
-
+        
+        // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
         return redirect()->route('emails.index')
             ->with('success', 'User ' . $user . ' password reset successfully!')
             ->with('lastId', $user);

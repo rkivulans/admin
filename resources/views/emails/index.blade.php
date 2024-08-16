@@ -25,7 +25,7 @@
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
                                     >
                                         Emails
                                     </th>
@@ -41,7 +41,7 @@
                                 @foreach ($users as $user)
                                     <tr @if ($user->email == session('lastId')) class="bg-gray-50" @endif>
                                         <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
                                         >
                                             {{ $user->email }}
                                         </td>
