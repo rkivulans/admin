@@ -21,7 +21,7 @@ class MailApiTransformer
       //  return $transformedUserList;
 
         $transformedUserList = $this->mailboxService->getMailUsers()
-        ->filter(fn($data1) => in_array($data1->domain, $domains))
+        ->filter(fn($data1) => count($domains) ? in_array($data1->domain, $domains) : $data1)
         ->flatMap(fn($data2) => $data2->users);
 
         return $transformedUserList;
