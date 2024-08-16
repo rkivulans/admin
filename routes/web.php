@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
 */
 
 Route::resource('emails', EmailController::class)
-    ->only(['index', 'create', 'edit', 'store'])
+    ->only(['index', 'create', 'edit', 'store', 'update'])
     ->middleware(['auth', 'verified']);
 
 Route::resource('aliases', AliasController::class)

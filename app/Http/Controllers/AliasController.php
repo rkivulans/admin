@@ -41,13 +41,13 @@ class AliasController extends Controller
             ->with('lastId', $validated['alias']);
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $alias)
     {
         $address = 'test@gmail.com';
         $forwards_to = ['test2@gmail.com', 'test3@gmail.com'];
 
         return view('aliases.edit', [
-            'address' => $address,
+            'address' => $alias,
             'forwards_to' => $forwards_to,
         ]);
     }
@@ -58,6 +58,8 @@ class AliasController extends Controller
             'forwards_to' => 'required|string',
         ]);
 
-        return redirect()->route('aliases.edit', ['alias' => $alias])->with('success', 'Alias updated successfully!');
+        return redirect()->route('aliases.index')
+            ->with('success', 'Alias ' . $alias . ' updated successfully!')
+            ->with('lastId', $alias);
     }
 }
