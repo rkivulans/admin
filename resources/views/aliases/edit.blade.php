@@ -28,7 +28,6 @@
                     <x-input-label for="alias" :value="__('Alias')" />
                     <x-text-input
                         id="alias"
-                        name="alias"
                         type="text"
                         value="{{ $address }}"
                         class="mt-1 block w-full bg-gray-200"
@@ -51,9 +50,6 @@
                     <x-primary-button>{{ __("Update") }}</x-primary-button>
                 </div>
 
-                @if (session('success'))
-                    <p class="text-green-600 mt-4">{{ session('success') }}</p>
-                @endif
             </form>
         </div>
     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MailApiTransformer;
 use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class EmailController extends Controller
 {
@@ -43,11 +44,13 @@ class EmailController extends Controller
             'password' => 'required|string|min:8',
             'role' => 'required|string',
         ]);
-
-        return redirect()->route('emails.create')->with('success', 'Form submitted successfully!');
+        
+        return redirect()->route('emails.index')
+            ->with('success', 'Email ' . $validated['email'] . ' created successfully!')
+            ->with('lastId', $validated['email']);
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $user)
     {
 
         $email = 'kristaps321@example.coom';
@@ -55,5 +58,17 @@ class EmailController extends Controller
         return view('emails.edit', ['email' => $email,
 
         ]);
+    }
+
+    public function update(Request $request, $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:8',
+        ]);
+
+        return redirect()->route('emails.index')
+            ->with('success', 'User ' . $user . ' password reset successfully!')
+            ->with('lastId', $user);
     }
 }
