@@ -63,3 +63,83 @@ test('that mailboxes are filtered by domains', function () {
     expect($api->getUsers(['domain1.example.com', 'domain3.example.com'])->toArray())
         ->toEqual($expectedResult->toArray());
 });
+
+
+test('that list of aliases are returned', function () {
+    $apiResponse = collect([
+        (object)[
+            "domain" => "domain1.example.com",
+            "aliases" => [
+                (object)["address"=>"userAA@domain1.example.com"],
+                (object)["address"=>"userBB@domain1.example.com"],
+            ]
+        ],
+        (object)[
+            "domain" => "domain2.example.com",
+            "aliases" => [
+                (object)["address"=>"userCC@domain2.example.com"],
+                (object)["address"=>"userBB@domain2.example.com"],
+            ]
+        ],
+        (object)[
+            "domain" => "domain3.example.com",
+            "aliases" => [
+                (object)["address"=>"userDD@domain3.example.com"],
+            ]
+        ],
+    ]);
+
+    $expectedResult = collect([
+        (object)["address"=>"userAA@domain1.example.com"],
+        (object)["address"=>"userBB@domain1.example.com"],
+        (object)["address"=>"userCC@domain2.example.com"],
+        (object)["address"=>"userBB@domain2.example.com"],
+        (object)["address"=>"userDD@domain3.example.com"],
+    ]);
+
+
+    $mailboxService = Mockery::mock(MailboxServiceInterface::class);
+    $mailboxService->shouldReceive('getMailAliases')->andReturn($apiResponse);
+    $api = new MailApiTransformer($mailboxService);
+
+    expect($api->getAliases()->toArray())
+        ->toEqual($expectedResult->toArray());
+});
+
+test('that list of aliases are filtered by domains', function () {
+    $apiResponse = collect([
+        (object)[
+            "domain" => "domain1.example.com",
+            "aliases" => [
+                (object)["address"=>"userAA@domain1.example.com"],
+                (object)["address"=>"userBB@domain1.example.com"],
+            ]
+        ],
+        (object)[
+            "domain" => "domain2.example.com",
+            "aliases" => [
+                (object)["address"=>"userCC@domain2.example.com"],
+                (object)["address"=>"userBB@domain2.example.com"],
+            ]
+        ],
+        (object)[
+            "domain" => "domain3.example.com",
+            "aliases" => [
+                (object)["address"=>"userDD@domain3.example.com"],
+            ]
+        ],
+    ]);
+
+    $expectedResult = collect([
+        (object)["address"=>"userCC@domain2.example.com"],
+        (object)["address"=>"userBB@domain2.example.com"],
+    ]);
+
+
+    $mailboxService = Mockery::mock(MailboxServiceInterface::class);
+    $mailboxService->shouldReceive('getMailAliases')->andReturn($apiResponse);
+    $api = new MailApiTransformer($mailboxService);
+
+    expect($api->getAliases(['domain2.example.com'])->toArray())
+        ->toEqual($expectedResult->toArray());
+});

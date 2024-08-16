@@ -21,16 +21,22 @@ class MailApiTransformer
       //  return $transformedUserList;
 
         $transformedUserList = $this->mailboxService->getMailUsers()
-        ->filter(fn($data1) => count($domains) ? in_array($data1->domain, $domains) : $data1)
-        ->flatMap(fn($data2) => $data2->users);
+        ->filter(fn($data) => $this->domainFilter($data, $domains))
+        ->flatMap(fn($data) => $data->users);
 
         return $transformedUserList;
     }
 
-    public function getAliases(array $domains): Collection {
-        $transformedAlisasList = $this->mailboxService->getMailAliases();
-        ///// here comes the magic
+    public function getAliases(array $domains = []): Collection {
+        $transformedAlisasList = $this->mailboxService->getMailAliases()
+        ->filter(fn($data) => $this->domainFilter($data, $domains))
+        ->flatMap(fn($data) => $data->aliases);
 
         return $transformedAlisasList;
+    }
+
+
+    private function domainFilter($data, $domains){
+      return count($domains) ? in_array($data->domain, $domains) : $data;
     }
 }
