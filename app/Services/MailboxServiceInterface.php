@@ -14,7 +14,7 @@ interface MailboxServiceInterface
 
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER);
 
-    public function addOrUpdateMailAlias(string $address, string $forwards_to, ?string $permitted_senders = null, int $update_if_exists = 0);
+    public function addOrUpdateMailAlias(string $address, string $forwardsTo, ?string $permittedSenders = null, int $updateIfExists = 0);
 
     public function setMailUserPassword(string $email, string $password);
 

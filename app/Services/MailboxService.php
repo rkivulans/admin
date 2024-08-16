@@ -78,7 +78,6 @@ class MailboxService implements MailboxServiceInterface
         $response = $this->httpCall()
             ->asForm()
             ->post('{+endpoint}/mail/aliases/add', [
-
                 'update_if_exists' => $updateIfExists,
                 'address' => $address,
                 'forwards_to' => $forwardsTo,
