@@ -4,11 +4,11 @@ use App\Services\MailApiTransformer;
 
 test('that list of mailboxes is returned', function () {
     $apiResponse = collect([
-        [
+        (object)[
             "domain" => "domain1.example.com",
             "users" => [
-                ["email"=>"user1@domain1.example.com"],
-                ["email"=>"user2@domain1.example.com"],
+                (object)["email"=>"user1@domain1.example.com"],
+                (object)["email"=>"user2@domain1.example.com"],
             ]
         ]
     ]);
