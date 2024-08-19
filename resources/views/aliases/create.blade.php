@@ -16,7 +16,7 @@
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600">
-                    {{ __("Add a new alias to forward emails to other email addresses") }}
+                    {{ __("Add a new alias to forward emails to other email addresses.") }}
                 </p>
             </header>
 

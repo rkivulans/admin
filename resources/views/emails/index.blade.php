@@ -8,7 +8,7 @@
         <div class="flex justify-between">
             <h1 class="text-lg">{{ __("Mailboxes") }}</h1>
             <x-primary-button as="a" href="{{ route('emails.create') }}">
-                {{ __("Create mailbox") }}
+                {{ __("Create") }}
             </x-primary-button>
         </div>
 

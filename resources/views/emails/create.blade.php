@@ -69,7 +69,7 @@
 
                 <div class="flex items-center gap-4">
                     <x-primary-button>
-                        {{ __("Create mailbox") }}
+                        {{ __("Create") }}
                     </x-primary-button>
                 </div>
                 
