@@ -6,13 +6,13 @@ use Illuminate\Support\Collection;
 
 class DevMailboxService implements MailboxServiceInterface
 {
-    public function getEmailUsers(): Collection
+    public function getMailUsers(): Collection
     {
         $response = json_decode(<<<'JSON'
-            [{"domain":"devmail.ke.com.lv","users":[{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
+            [{"domain":"devmail.ke.com.lv","users":[{"email":"kristaps@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"lauris@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards-api@devmail.ke.com.lv","privileges":["admin"],"status":"active"},{"email":"rihards@devmail.ke.com.lv","privileges":["admin"],"status":"active"}, {"email":"test@devmail.ke.com.lv", "mailbox": "/home/user-data/mail/mailboxes/devmail.ke.com.lv/test", "privileges":[],"status":"inactive"}]},{"domain":"laurismail.ke.com.lv","users":[{"email":"user@laurismail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"rihardsmail.ke.com.lv","users":[{"email":"user@rihardsmail.ke.com.lv","privileges":[],"status":"active"}]},{"domain":"supermail.ke.com.lv","users":[{"email":"other-user@supermail.ke.com.lv","privileges":[],"status":"active"},{"email":"user@supermail.ke.com.lv","privileges":[],"status":"active"}]}]
         JSON);
 
-        return collect($response[0]->users);
+        return collect($response);
     }
 
     public function getMailAliases(): Collection
@@ -23,10 +23,54 @@ class DevMailboxService implements MailboxServiceInterface
          JSON
         );
 
-        return collect($response[0]->aliases);
+        return collect($response);
+    }
+
+    public function getAllDomains(): Collection
+    {
+        $response = [
+            'box.devmail.ke.com.lv',
+            'rihardsmail.ke.com.lv',
+            'laurismail.ke.com.lv',
+            'devmail.ke.com.lv',
+            'supermail.ke.com.lv',
+            'extramail.ke.com.lv',
+        ];
+
+        return collect($response);
     }
 
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
+    {
+        return true;
+    }
+
+    public function addOrUpdateMailAlias(string $address, string $forwards_to, ?string $permitted_senders = null, int $update_if_exists = 0)
+    {
+        return true;
+    }
+
+    public function setMailUserPassword(string $email, string $password)
+    {
+        return true;
+    }
+
+    public function removeMailUser(string $email)
+    {
+        return true;
+    }
+
+    public function removeMailAlias(string $address)
+    {
+        return true;
+    }
+
+    public function addMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
+    {
+        return true;
+    }
+
+    public function removeMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
     {
         return true;
     }

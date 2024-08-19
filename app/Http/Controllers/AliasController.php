@@ -6,21 +6,22 @@ use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
+use App\Services\MailApiTransformer;
 
 class AliasController extends Controller
 {
-    protected $mailboxService;
+    protected $mailApi;
 
     public function __construct(MailboxServiceInterface $mailboxService)
     {
-        $this->mailboxService = $mailboxService;
+        $this->mailApi = new MailApiTransformer($mailboxService);
     }
 
     public function index()
     {
 
         return view('aliases.index', [
-            'aliases' => $this->mailboxService->getMailAliases()->sortBy('address'),
+            'aliases' => $this->mailApi->getAliases()->sortBy('address'),
         ]);
     }
 
@@ -42,9 +43,8 @@ class AliasController extends Controller
             ->with('lastId', $validated['alias']);
     }
 
-    public function edit(Request $request, $alias)
+    public function edit($alias)
     {
-        $address = 'test@gmail.com';
         $forwards_to = ['test2@gmail.com', 'test3@gmail.com'];
 
         return view('aliases.edit', [
