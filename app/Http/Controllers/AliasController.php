@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Validator;
 
 class AliasController extends Controller
 {
@@ -54,9 +55,14 @@ class AliasController extends Controller
 
     public function update(Request $request, $alias): RedirectResponse
     {
-        $validated = $request->validate([
-            'forwards_to' => 'required|string',
-        ]);
+        $formData = [
+            'forwards_to' => explode("\r\n", $request->input('forwards_to')),
+        ];
+
+        $validated = Validator::make($formData,
+        [
+            'forwards_to.*' => 'required|email',
+        ])->validate();
 
         return redirect()->route('aliases.index')
             ->with('success', 'Alias ' . $alias . ' updated successfully!')
