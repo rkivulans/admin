@@ -5,21 +5,22 @@ namespace App\Http\Controllers;
 use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use App\Services\MailApiTransformer;
 
 class AliasController extends Controller
 {
-    protected $mailboxService;
+    protected $mailApi;
 
     public function __construct(MailboxServiceInterface $mailboxService)
     {
-        $this->mailboxService = $mailboxService;
+        $this->mailApi = new MailApiTransformer($mailboxService);
     }
 
     public function index()
     {
-
+     
         return view('aliases.index', [
-            'aliases' => $this->mailboxService->getMailAliases()->sortBy('address'),
+            'aliases' => $this->mailApi->getAliases()->sortBy('address'),
         ]);
     }
 

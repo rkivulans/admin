@@ -27,7 +27,8 @@ class MailboxService implements MailboxServiceInterface
         return Http::withBasicAuth($this->user, $this->password)
             ->withUrlParameters([
                 'endpoint' => $this->server,
-            ]);
+            ])
+            ->throw();
     }
 
     public function getMailUsers(): Collection
