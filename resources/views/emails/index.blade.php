@@ -6,9 +6,9 @@
     </x-slot>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
         <div class="flex justify-between">
-            <h1 class="text-lg">Mailboxes</h1>
+            <h1 class="text-lg">{{ __("Mailboxes") }}</h1>
             <x-primary-button as="a" href="{{ route('emails.create') }}">
-                Add email
+                {{ __("Create mailbox") }}
             </x-primary-button>
         </div>
 
@@ -25,15 +25,15 @@
                                 <tr>
                                     <th
                                         scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                     >
-                                        Emails
+                                        {{ __("Emails") }}
                                     </th>
                                     <th
                                         scope="col"
                                         class="relative py-3.5 pl-3 pr-4 sm:pr-6"
                                     >
-                                        <span class="sr-only">Edit</span>
+                                        <span class="sr-only">{{ __("Edit") }}</span>
                                     </th>
                                 </tr>
                             </thead>
@@ -52,7 +52,7 @@
                                                 href="{{ route("emails.edit", ["email" => $user->email]) }}"
                                                 class="text-indigo-600 hover:text-indigo-900"
                                             >
-                                                Edit
+                                                {{ __("Edit") }}
                                                 <span class="sr-only">
                                                     , {{ $user->email }}
                                                 </span>

@@ -1,4 +1,17 @@
 {
+    "Mailboxes": "Pastkastītes",
+    "Create mailbox": "Izveidot pastkastīti",
+    "Emails": "E-pasti",
+    "Edit": "Labot",
+    "Create New Mailbox": "Izveidot jaunu pastkastīti",
+    "Add a new email address to your domain.": "Pievienot savai domēnai jaunu e-pasta adresi.",
+    "Email Address": "E-pasta adrese",
+    "Password": "Parole",
+    "Role": "Loma",
+    "Choose a role": "Izvēlies lomu",
+    "User": "Lietotājs",
+    "Admin": "Administrātors",
+    "Reset Password for :email": "Nomainīt :email paroli",
     "Zipper": "Rāvējslēdzis"
 }
 

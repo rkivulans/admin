@@ -42,7 +42,7 @@
                         name="forwards_to"
                         rows="3"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    >{{ old('forwards_to', implode(", ", $forwards_to)) }}</textarea>
+                    >{{ old('forwards_to', implode("\n", $forwards_to)) }}</textarea>
                     <x-input-error :messages="$errors->get('forwards_to')" class="mt-2" />
                 </div>
 
