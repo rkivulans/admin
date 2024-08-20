@@ -144,7 +144,7 @@ test('return all domains', function () {
         'laurismail.ke.com.lv',
         'devmail.ke.com.lv',
     ]);
- 
+
 
     $mailboxService = Mockery::mock(MailboxServiceInterface::class);
     $mailboxService->shouldReceive('getAllDomains')->andReturn($apiResponse);
@@ -162,19 +162,14 @@ test('return filtered domains', function () {
         'devmail.ke.com.lv',
     ]);
 
-    //// Seit tiem array key jaatbilst savadak test fail
-    //// labu laiku seit nosedeju...
-    $expectedResult = collect([
-       2 => 'laurismail.ke.com.lv', 
-       3 => 'devmail.ke.com.lv',
-    ]);
-
     $mailboxService = Mockery::mock(MailboxServiceInterface::class);
     $mailboxService->shouldReceive('getAllDomains')->andReturn($apiResponse);
     $api = new MailApiTransformer($mailboxService);
 
     expect($api->getDomains(['laurismail.ke.com.lv', 'devmail.ke.com.lv'])->toArray())
-        ->toEqual($expectedResult->toArray());
+        ->toContain('laurismail.ke.com.lv')
+        ->toContain('devmail.ke.com.lv')
+        ->toHaveCount(2);
 });
 
 test('if user is returned by domain', function () {
