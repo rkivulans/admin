@@ -32,20 +32,19 @@ class MailApiTransformer
         ->filter(fn ($domain) => $this->domainFilter($domain, $domains));
     }
 
-    ///// Drosvien nepareizi sapratu ka bija domats, pagaidam atstaju sadi
     public function getMailbox(string $email, array $allowedDomains = []){
 
         return 
-        $this->getUsers(!count($allowedDomains) ? [] : $allowedDomains) /// for superadmin?
+        $this->getUsers(!count($allowedDomains) ? [] : $allowedDomains) 
         ->whereIn('email', [$email])
         ->first(); ///// atgriez json vai null
     }
 
-     ///// Drosvien nepareizi sapratu ka bija domats, pagaidam atstaju sadi
-    public function getAlias(string $address, array $allowedDomains){
+   
+    public function getAlias(string $address, array $allowedDomains = []){
 
-        return !count($allowedDomains) ? null : 
-        $this->getAliases($allowedDomains)
+        return  
+        $this->getAliases(!count($allowedDomains) ? [] : $allowedDomains)
         ->whereIn('address', [$address])
         ->first();   ///// atgriez json vai null
     }

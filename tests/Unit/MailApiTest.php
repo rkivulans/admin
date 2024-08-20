@@ -2,9 +2,9 @@
 
 use App\Services\MailApiTransformer;
 use App\Services\MailboxServiceInterface;
-use App\Tests\MyMockery;
+use Tests\TestData;
 
-
+$data = new TestData();
 
 test('that list of mailboxes is returned', function () {
     $apiResponse = collect([
@@ -200,8 +200,7 @@ test('if user is returned by domain', function () {
         ],
     ]);
 
-    $expectedResult =json_decode(
-    <<<JSON
+    $expectedResult =json_decode(<<<JSON
     {"email":"userCC@domain3.example.com"}
     JSON
     );
@@ -267,8 +266,7 @@ test('test if user is returned (superadmin)', function () {
         ],
     ]);
 
-    $expectedResult =json_decode(
-        <<<JSON
+    $expectedResult =json_decode(<<<JSON
         {"email":"userAA@domain1.example.com"}
         JSON
         );
@@ -281,3 +279,50 @@ test('test if user is returned (superadmin)', function () {
         ->toEqual($expectedResult);
 });
 
+
+
+test('if alias is returned by domain', function () use($data) {
+    $expectedResult =json_decode(<<<JSON
+    {"address":"userCC@domain3.example.com"}
+    JSON
+    );
+
+    $mailboxService = Mockery::mock(MailboxServiceInterface::class);
+    $mailboxService->shouldReceive('getMailAliases')->andReturn($data->apiAliasResponse());
+    $api = new MailApiTransformer($mailboxService);
+
+    expect($api->getAlias('userCC@domain3.example.com', ['domain3.example.com']))
+        ->toEqual($expectedResult);
+});
+
+
+test('test if returned alias belongs to domains', function () use ($data){
+
+    $expectedResult =json_decode(<<<JSON
+    {"address":"userCC@domain3.example.com"}
+    JSON
+    );
+
+
+    $mailboxService = Mockery::mock(MailboxServiceInterface::class);
+    $mailboxService->shouldReceive('getMailAliases')->andReturn($data->apiAliasResponse());
+    $api = new MailApiTransformer($mailboxService);
+
+    expect($api->getAlias('userCC@domain3.example.com', ['domain2.example.com']))
+        ->toEqual(null);
+});
+
+test('test if alias is returned (superadmin)', function () use ($data){
+    $expectedResult =json_decode(<<<JSON
+    {"address":"userCC@domain3.example.com"}
+    JSON
+    );
+
+
+    $mailboxService = Mockery::mock(MailboxServiceInterface::class);
+    $mailboxService->shouldReceive('getMailAliases')->andReturn($data->apiAliasResponse());
+    $api = new MailApiTransformer($mailboxService);
+
+    expect($api->getAlias('userCC@domain3.example.com'))
+        ->toEqual($expectedResult);
+});
