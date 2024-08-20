@@ -36,14 +36,11 @@
                         class="mt-1 block w-full"
                         autocomplete="new-password"
                     />
-                    <x-input-error
-                        :messages="$errors->updatePassword->get('password')"
-                        class="mt-2"
-                    />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <x-primary-button>{{ __("Reset") }}</x-primary-button>
+                    <x-primary-button>{{ __("Reset Password") }}</x-primary-button>
 
                     @if (session("status") === "password-updated")
                         <p
@@ -53,7 +50,7 @@
                             x-init="setTimeout(() => (show = false), 2000)"
                             class="text-sm text-gray-600"
                         >
-                            {{ __("Saved.") }}
+                            {{ __("Saved") }}
                         </p>
                     @endif
                 </div>

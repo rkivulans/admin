@@ -57,10 +57,10 @@
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
                     >
                         <option value="" disabled selected>
-                            Choose a role
+                            {{ __("Choose a role") }}
                         </option>
-                        <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
-                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>{{ __("User") }}</option>
+                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>{{ __("Admin") }}</option>
                     </select>
                     
                     <x-input-error :messages="$errors->get('role')" class="mt-2"
@@ -69,7 +69,7 @@
 
                 <div class="flex items-center gap-4">
                     <x-primary-button>
-                        {{ __("Add Email") }}
+                        {{ __("Create") }}
                     </x-primary-button>
                 </div>
                 

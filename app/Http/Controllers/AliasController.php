@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MailboxServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Validator;
 use App\Services\MailApiTransformer;
 
 class AliasController extends Controller
@@ -18,7 +19,7 @@ class AliasController extends Controller
 
     public function index()
     {
-     
+
         return view('aliases.index', [
             'aliases' => $this->mailApi->getAliases()->sortBy('address'),
         ]);
@@ -38,13 +39,12 @@ class AliasController extends Controller
         ]);
 
         return redirect()->route('aliases.index')
-            ->with('success', 'Alias ' . $validated['alias'] . ' created successfully!')
+            ->with('success', __('Alias :alias created successfully!', ['alias'=> $validated['alias'] ]))
             ->with('lastId', $validated['alias']);
     }
 
-    public function edit(Request $request, $alias)
+    public function edit($alias)
     {
-        $address = 'test@gmail.com';
         $forwards_to = ['test2@gmail.com', 'test3@gmail.com'];
 
         return view('aliases.edit', [
@@ -55,12 +55,17 @@ class AliasController extends Controller
 
     public function update(Request $request, $alias): RedirectResponse
     {
-        $validated = $request->validate([
-            'forwards_to' => 'required|string',
-        ]);
+        $formData = [
+            'forwards_to' => explode("\r\n", $request->input('forwards_to')),
+        ];
+
+        $validated = Validator::make($formData,
+        [
+            'forwards_to.*' => 'required|email',
+        ])->validate();
 
         return redirect()->route('aliases.index')
-            ->with('success', 'Alias ' . $alias . ' updated successfully!')
+        ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
             ->with('lastId', $alias);
     }
 }

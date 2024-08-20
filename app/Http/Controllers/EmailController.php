@@ -47,7 +47,7 @@ class EmailController extends Controller
         ]);
         
         return redirect()->route('emails.index')
-            ->with('success', 'Email ' . $validated['email'] . ' created successfully!')
+            ->with('success', __('Email :email created successfully!', ['email' => $validated['email']]))
             ->with('lastId', $validated['email']);
     }
 
@@ -68,7 +68,7 @@ class EmailController extends Controller
         
         // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
         return redirect()->route('emails.index')
-            ->with('success', 'User ' . $user . ' password reset successfully!')
+            ->with('success', __('User :user password reset successfully!', ['user' => $user]))
             ->with('lastId', $user);
     }
 }
