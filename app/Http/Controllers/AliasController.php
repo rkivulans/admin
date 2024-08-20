@@ -39,7 +39,7 @@ class AliasController extends Controller
         ]);
 
         return redirect()->route('aliases.index')
-            ->with('success', 'Alias ' . $validated['alias'] . ' created successfully!')
+            ->with('success', __('Alias :alias created successfully!', ['alias'=> $validated['alias'] ]))
             ->with('lastId', $validated['alias']);
     }
 
@@ -65,7 +65,7 @@ class AliasController extends Controller
         ])->validate();
 
         return redirect()->route('aliases.index')
-            ->with('success', 'Alias ' . $alias . ' updated successfully!')
+        ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
             ->with('lastId', $alias);
     }
 }

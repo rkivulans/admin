@@ -36,10 +36,7 @@
                         class="mt-1 block w-full"
                         autocomplete="new-password"
                     />
-                    <x-input-error
-                        :messages="$errors->updatePassword->get('password')"
-                        class="mt-2"
-                    />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
                 <div class="flex items-center gap-4">
