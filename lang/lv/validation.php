@@ -2,17 +2,16 @@
 
 return [
     'required' => 'Lauks :attribute ir obligāts.',
-    'required_array_keys' => 'Laukā :attribute jābūt ierakstiem: :values.',
-    'required_if' => 'Lauks :attribute ir obligāts, ja :other ir :value.',
-    'required_if_accepted' => 'Lauks :attribute ir obligāts, ja :other ir pieņemts.',
-    'required_if_declined' => 'Lauks :attribute ir obligāts, ja :other ir noraidīts.',
-    'required_unless' => 'Lauks :attribute ir obligāts, ja vien :other nav :values.',
-    'required_with' => 'Lauks :attribute ir obligāts, ja :values ir norādīts.',
-    'required_with_all' => 'Lauks :attribute ir obligāts, ja :values ir norādīti.',
-    'required_without' => 'Lauks :attribute ir obligāts, ja :values nav norādīts.',
-    'required_without_all' => 'Lauks :attribute ir obligāts, ja nav norādīts neviens no :values.',
+    
+    'confirmed' => 'Lauks :attribute nesakrīt.',
+
+    'unique' => 'Lauks :attribute jau ir aizņemts.',
+
+    'current_password' => 'Parole ir nepareiza.',
 
     'mail' => 'Laukam :attribute jābūt e-pasta adresei.',
+
+    'lowercase' => 'Laukam :attribute ir jābūt rakstītam ar mazajiem burtiem.',
 
     'max' => [
         'array' => 'Laukā :attribute nedrīkst būt vairāk par :max elementiem.',
@@ -26,6 +25,14 @@ return [
         'file' => 'Lauka :attribute izmēram jābūt vismaz :min kilobaitiem.',
         'numeric' => 'Laukam :attribute jābūt vismaz :min.',
         'string' => 'Laukam :attribute jābūt vismaz :min rakstzīmēm.',
+    ],
+
+    'password' => [
+    'letters' => 'Laukam :attribute ir jāietver vismaz viens burts.',
+    'mixed' => 'Laukam :attribute ir jāietver vismaz viens lielais un viens mazais burts.',
+    'numbers' => 'Laukam :attribute ir jāietver vismaz viens cipars.',
+    'symbols' => 'Laukam :attribute ir jāietver vismaz viens simbols.',
+    'uncompromised' => 'Norādītā :attribute ir parādījusies datu noplūdē. Lūdzu, izvēlieties citu :attribute.',
     ],
 
     'string' => 'Laukam :attribute jābūt teksta virknei.',
