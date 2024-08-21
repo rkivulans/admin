@@ -48,7 +48,7 @@
                         id="forwards_to"
                         name="forwards_to"
                         rows="3"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm min-h-12"
                     >
 {{ old("forwards_to", implode("\n", $forwards_to)) }}</textarea
                     >
