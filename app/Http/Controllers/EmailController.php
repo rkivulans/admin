@@ -45,7 +45,22 @@ class EmailController extends Controller
             'password' => 'required|string|min:8',
             'role' => ['required', 'string', Rule::in(['user', 'admin'])], // Pārbauda, vai lomas vērtība ir "user" vai "admin"
         ]);
-        
+
+        /*
+           Es ieliku addUser funckija kaa parametru visu validation,
+           jo padodot tikai email un allowed domains es netieku pie paroles,
+           savadak so funkciju man liekas butu jasauc savadak.
+           Varu partaisit ja nav pareizi un uzlikt ka transformeri parbauda tikai allowed domains
+           un seit controlieri palaist $this->mailApi->mailboxService->addMailUser,
+           bet tad atkal addUser funkcija butu janosauc savadak.
+        */
+        try {
+            $this->mailApi->addUser($validated, ['devmail.ke.com.lv']);
+        } catch (\Throwable $th) {
+            return redirect()->back()
+            ->with('error', $th->getMessage());
+        }
+
         return redirect()->route('emails.index')
             ->with('success', __('Email :email created successfully!', ['email' => $validated['email']]))
             ->with('lastId', $validated['email']);
@@ -53,6 +68,7 @@ class EmailController extends Controller
 
     public function edit(Request $request, $user)
     {
+        
         // Atgriež skatu 'emails.edit
         return view('emails.edit', [
             'email' => $user,
@@ -65,6 +81,15 @@ class EmailController extends Controller
         $validated = $request->validate([
             'password' => 'required|string|min:8',
         ]);
+
+        try {
+            $this->mailApi->mailboxService->setMailUserPassword($user, $validated['password']);
+        } catch (\Throwable $th) {
+            return redirect()->back()
+            ->with('error', $th->getMessage());
+        }
+
+
         
         // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
         return redirect()->route('emails.index')

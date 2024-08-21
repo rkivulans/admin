@@ -2,11 +2,15 @@
 
 namespace App\Services;
 
+use ErrorException;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class MailApiTransformer
 {
-    public function __construct(protected MailboxServiceInterface $mailboxService) {}
+    public function __construct(public MailboxServiceInterface $mailboxService) {}
 
     public function getUsers(array $domains = []): Collection
     {
@@ -47,6 +51,31 @@ class MailApiTransformer
         $this->getAliases(!count($allowedDomains) ? [] : $allowedDomains)
         ->whereIn('address', [$address])
         ->first();   ///// atgriez json vai null
+    }
+
+
+    public function addUser(array $validated, array $allowedDomains = []){
+
+        // ar so variantu neparbauda vai allowed domain ir domains (pareizs)
+        //$allowed = Str::endsWith($validated['email'], $allowedDomains);
+
+        /// Seit ir vairaki veidi ka parbaudit, nezinu ka tev labak patik
+        /// var ari ar parasto ciklu.
+        $allowed = Arr::first($allowedDomains, function($data) use ($validated){
+             return Str::endsWith($validated['email'], "@$data");
+        });
+
+        if($allowed){
+            $this->mailboxService->addMailUser(
+                $validated['email'],
+                $validated['password'],
+                MailUserPrivilegeEnum::{Str::upper($validated['role'])},
+            );
+        } else {
+            throw new ErrorException("Email is not in allowed emails list!");
+        }
+
+       
     }
 
     private function domainFilter($data, $domains)
