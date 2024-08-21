@@ -37,6 +37,18 @@ class AliasController extends Controller
             'alias' => 'required|email|max:255',
             'forwards_to' => 'required|string',
         ]);
+   
+        try {
+            $this->mailService->addAlias(
+                $validated['alias'], 
+                $validated['forwards_to'],
+                ['devmail.ke.com.lv']
+                //// permitted default = null
+            );
+        } catch (\ErrorException $error) {
+            return redirect()->back()
+                ->with('error', $error->getMessage());
+        }
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias created successfully!', ['alias' => $validated['alias']]))
@@ -44,8 +56,10 @@ class AliasController extends Controller
     }
 
     public function edit($alias)
-    {
-        $forwards_to = ['test2@gmail.com', 'test3@gmail.com'];
+    {      
+        /// ceru ka es pareizi domaju
+        //// seit iespejams ari vajadzeja try un catch, bet pagaidam atstaju
+        $forwards_to = $this->mailService->getAliasForwardsTo($alias, ['devmail.ke.com.lv']);
 
         return view('aliases.edit', [
             'address' => $alias,
@@ -64,8 +78,26 @@ class AliasController extends Controller
                 'forwards_to.*' => 'required|email',
             ])->validate();
 
+        
+            try {
+                $this->mailService->updateAlias(
+                    $alias, 
+                    join(', ', $validated['forwards_to']),
+                    ['devmail.ke.com.lv']
+                    //// permitted default = null
+                );
+            } catch (\ErrorException $error) {
+                return redirect()->back()
+                    ->with('error', $error->getMessage());
+            }
+
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
             ->with('lastId', $alias);
     }
+
+
+
+
+    /////destroy ? archive?
 }

@@ -53,24 +53,19 @@ class EmailController extends Controller
             ],
         ]);
 
-        /*
-           Es ieliku addUser funckija kaa parametru visu validation,
-           jo padodot tikai email un allowed domains es netieku pie paroles,
-           savadak so funkciju man liekas butu jasauc savadak.
-           Varu partaisit ja nav pareizi un uzlikt ka transformeri parbauda tikai allowed domains
-           un seit controlieri palaist $this->mailService->mailboxService->addMailUser,
-           bet tad atkal addUser funkcija butu janosauc savadak.
-        */
+    
+       
         try {
             $this->mailService->addUser(
-                $validated['user'],
+                $validated['email'],
                 $validated['password'],
-                MailUserPrivilegeEnum::from($validated['role']),
+                //MailUserPrivilegeEnum::from($validated['role']), There's error with this
+                MailUserPrivilegeEnum::{$validated['role']}, // only this works for now.
                 ['devmail.ke.com.lv']
             );
-        } catch (\Throwable $th) {
+        } catch (\ErrorException $error) {
             return redirect()->back()
-                ->with('error', $th->getMessage());
+                ->with('error', $error->getMessage());
         }
 
         return redirect()->route('emails.index')
@@ -95,10 +90,12 @@ class EmailController extends Controller
         ]);
 
         try {
-            $this->mailService->setMailUserPassword($user, $validated['password']);
-        } catch (\Throwable $th) {
+            $this->mailService->setPassword(
+                $user, $validated['password'], ['devmail.ke.com.lv'] 
+            );
+        } catch (\ErrorException $error) {
             return redirect()->back()
-                ->with('error', $th->getMessage());
+                ->with('error', $error->getMessage());
         }
 
         // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
@@ -106,4 +103,8 @@ class EmailController extends Controller
             ->with('success', __('User :user password reset successfully!', ['user' => $user]))
             ->with('lastId', $user);
     }
+
+
+
+    //// destroy ? archive?
 }
