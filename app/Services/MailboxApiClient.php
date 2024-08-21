@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
-class MailboxService implements MailboxServiceInterface
+class MailboxApiClient implements MailboxApiClientInterface
 {
     protected $user;
 

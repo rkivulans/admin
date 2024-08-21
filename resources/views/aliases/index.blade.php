@@ -39,13 +39,17 @@
                                         scope="col"
                                         class="relative py-3.5 pl-3 pr-4 sm:pr-6"
                                     >
-                                        <span class="sr-only">{{ __("Edit") }}</span>
+                                        <span class="sr-only">
+                                            {{ __("Edit") }}
+                                        </span>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach ($aliases as $alias)
-                                    <tr @if ($alias->address_display == session('lastId')) class="bg-gray-50" @endif>
+                                    <tr
+                                        @if ($alias->address_display == session('lastId')) class="bg-gray-50" @endif
+                                    >
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
                                         >

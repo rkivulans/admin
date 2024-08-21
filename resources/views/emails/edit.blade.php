@@ -20,7 +20,11 @@
                 </p>
             </header>
 
-            <form method="POST" action="{{ route('emails.update', ['email' => $email]) }}" class="mt-6 space-y-6">
+            <form
+                method="POST"
+                action="{{ route("emails.update", ["email" => $email]) }}"
+                class="mt-6 space-y-6"
+            >
                 @csrf
                 @method("put")
 
@@ -36,11 +40,16 @@
                         class="mt-1 block w-full"
                         autocomplete="new-password"
                     />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    <x-input-error
+                        :messages="$errors->get('password')"
+                        class="mt-2"
+                    />
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <x-primary-button>{{ __("Reset Password") }}</x-primary-button>
+                    <x-primary-button>
+                        {{ __("Reset Password") }}
+                    </x-primary-button>
 
                     @if (session("status") === "password-updated")
                         <p

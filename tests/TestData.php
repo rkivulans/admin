@@ -1,9 +1,11 @@
 <?php
+
 namespace Tests;
 
-class TestData{
-
-   public function apiAliasResponse(){
+class TestData
+{
+    public function apiAliasResponse()
+    {
         return collect([
             (object) [
                 'domain' => 'domain1.example.com',

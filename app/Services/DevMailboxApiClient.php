@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Collection;
 
-class DevMailboxService implements MailboxServiceInterface
+class DevMailboxApiClient implements MailboxApiClientInterface
 {
     public function getMailUsers(): Collection
     {

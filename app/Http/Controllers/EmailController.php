@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\MailApiTransformer;
-use App\Services\MailboxServiceInterface;
-use Illuminate\Http\Request;
+use App\Services\MailboxApiClientInterface;
+use App\Services\MailService;
+use App\Services\MailUserPrivilegeEnum;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class EmailController extends Controller
 {
-    protected $mailApi;
+    protected $mailService;
 
-    public function __construct(MailboxServiceInterface $mailboxService)
+    public function __construct(MailboxApiClientInterface $apiClient)
     {
-        $this->mailApi = new MailApiTransformer($mailboxService);
+        $this->mailService = new MailService($apiClient);
     }
 
     public function index()
     {
-        $users = $this->mailApi->getUsers([
+        $users = $this->mailService->getUsers([
             'box.devmail.ke.com.lv',
             'rihardsmail.ke.com.lv',
             'devmail.ke.com.lv',
@@ -43,7 +44,13 @@ class EmailController extends Controller
         $validated = $request->validate([
             'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
-            'role' => ['required', 'string', Rule::in(['user', 'admin'])], // Pārbauda, vai lomas vērtība ir "user" vai "admin"
+            'role' => [
+                'string',
+                Rule::in([
+                    MailUserPrivilegeEnum::ADMIN->name,
+                    MailUserPrivilegeEnum::USER->name
+                ])
+            ],
         ]);
 
         /*
@@ -51,14 +58,19 @@ class EmailController extends Controller
            jo padodot tikai email un allowed domains es netieku pie paroles,
            savadak so funkciju man liekas butu jasauc savadak.
            Varu partaisit ja nav pareizi un uzlikt ka transformeri parbauda tikai allowed domains
-           un seit controlieri palaist $this->mailApi->mailboxService->addMailUser,
+           un seit controlieri palaist $this->mailService->mailboxService->addMailUser,
            bet tad atkal addUser funkcija butu janosauc savadak.
         */
         try {
-            $this->mailApi->addUser($validated, ['devmail.ke.com.lv']);
+            $this->mailService->addUser(
+                $validated['user'],
+                $validated['password'],
+                MailUserPrivilegeEnum::from($validated['role']),
+                ['devmail.ke.com.lv']
+            );
         } catch (\Throwable $th) {
             return redirect()->back()
-            ->with('error', $th->getMessage());
+                ->with('error', $th->getMessage());
         }
 
         return redirect()->route('emails.index')
@@ -68,7 +80,7 @@ class EmailController extends Controller
 
     public function edit(Request $request, $user)
     {
-        
+
         // Atgriež skatu 'emails.edit
         return view('emails.edit', [
             'email' => $user,
@@ -83,14 +95,12 @@ class EmailController extends Controller
         ]);
 
         try {
-            $this->mailApi->mailboxService->setMailUserPassword($user, $validated['password']);
+            $this->mailService->setMailUserPassword($user, $validated['password']);
         } catch (\Throwable $th) {
             return redirect()->back()
-            ->with('error', $th->getMessage());
+                ->with('error', $th->getMessage());
         }
 
-
-        
         // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
         return redirect()->route('emails.index')
             ->with('success', __('User :user password reset successfully!', ['user' => $user]))
