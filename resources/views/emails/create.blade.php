@@ -69,9 +69,10 @@
                         </option>
 
                         @foreach ([
-                            \App\Services\MailUserPrivilegeEnum::USER,
-                            \App\Services\MailUserPrivilegeEnum::ADMIN
-                        ] as $role)
+                                \App\Services\MailUserPrivilegeEnum::USER,
+                                \App\Services\MailUserPrivilegeEnum::ADMIN
+                            ]
+                            as $role)
                             <option
                                 value="{{ $role->name }}"
                                 {{ old("role") === $role->name ? "selected" : "" }}

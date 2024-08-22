@@ -45,22 +45,20 @@ class EmailController extends Controller
             'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
             'role' => [
+                'required',
                 'string',
                 Rule::in([
                     MailUserPrivilegeEnum::ADMIN->name,
-                    MailUserPrivilegeEnum::USER->name
-                ])
+                    MailUserPrivilegeEnum::USER->name,
+                ]),
             ],
         ]);
 
-    
-       
         try {
             $this->mailService->addUser(
                 $validated['email'],
                 $validated['password'],
-                //MailUserPrivilegeEnum::from($validated['role']), There's error with this
-                MailUserPrivilegeEnum::{$validated['role']}, // only this works for now.
+                constant(MailUserPrivilegeEnum::class."::{$validated['role']}"), // TODO change to Foo::{$searchableConstant} when upgrading to php8.3,
                 ['devmail.ke.com.lv']
             );
         } catch (\ErrorException $error) {
@@ -91,7 +89,7 @@ class EmailController extends Controller
 
         try {
             $this->mailService->setPassword(
-                $user, $validated['password'], ['devmail.ke.com.lv'] 
+                $user, $validated['password'], ['devmail.ke.com.lv']
             );
         } catch (\ErrorException $error) {
             return redirect()->back()
@@ -103,8 +101,6 @@ class EmailController extends Controller
             ->with('success', __('User :user password reset successfully!', ['user' => $user]))
             ->with('lastId', $user);
     }
-
-
 
     //// destroy ? archive?
 }

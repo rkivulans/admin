@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use ErrorException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -54,8 +53,14 @@ class MailService
 
     protected function checkAccess($email, $allowedDomains = []): bool
     {
+        if (! count($allowedDomains)) { // for superadmin
+            return true;
+        }
+
         foreach ($allowedDomains as $allowedDomain) {
-            return Str::endsWith($email, "@$allowedDomain");
+            if (Str::endsWith($email, "@$allowedDomain")) {
+                return true;
+            }
         }
 
         return false;
@@ -63,55 +68,41 @@ class MailService
 
     public function addUser(string $email, string $password, MailUserPrivilegeEnum $role, array $allowedDomains = [])
     {
-        if (count($allowedDomains)){ /// for superadmin
-            abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
-        }
-        
+        abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
 
         $this->mailaApi->addMailUser(
             $email, $password, $role
         );
     }
 
-    public function setPassword(string $email, string $password, array $allowedDomains){
-        if (count($allowedDomains)){  //// for super admin
-            abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
-        }
+    public function setPassword(string $email, string $password, array $allowedDomains)
+    {
+        abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
 
         $this->mailaApi->setMailUserPassword(
             $email, $password
         );
     }
-           ////// Uztaisiju 2 atseviskas funkcijas add un update lai labak var saprast
-    public function addAlias(string $address, string $forwardsTo, array $allowedDomains = [], ?string $permittedSenders = null){
-        if (count($allowedDomains)){
-            abort_unless($this->checkAccess($address, $allowedDomains), 403);
-        }
-        
-        $this->mailaApi->addOrUpdateMailAlias(
-            $address, $forwardsTo, $permittedSenders  /// update = 0
-        );
-    }
 
-
-    public function updateAlias(string $address, string $forwardsTo, array $allowedDomains = [], ?string $permittedSenders = null){
-        if (count($allowedDomains)){
-            abort_unless($this->checkAccess($address, $allowedDomains), 403);
-        }
-
-        $this->mailaApi->addOrUpdateMailAlias(
-            $address, $forwardsTo, $permittedSenders, 1  /// update = 1
-        );
-    }
-
-     //// nezinu vai sadu vajadzeja, bet savadak uz edit padod statiskus datus prieks formas
-    public function getAliasForwardsTo(string $address, array $allowedDomains = []){
+    public function addAlias(string $address, array $forwardsTo, array $allowedDomains = [], ?string $permittedSenders = null)
+    {
         abort_unless($this->checkAccess($address, $allowedDomains), 403);
 
-        return $this->getAlias($address, $allowedDomains)->forwards_to;
+        $this->mailaApi->addOrUpdateMailAlias(
+            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists:0
+        );
     }
 
-    private function domainFilter($data, $domains)
+    public function updateAlias(string $address, array $forwardsTo, array $allowedDomains = [], ?string $permittedSenders = null)
+    {
+        abort_unless($this->checkAccess($address, $allowedDomains), 403);
+
+        $this->mailaApi->addOrUpdateMailAlias(
+            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists:1
+        );
+    }
+
+    protected function domainFilter($data, $domains)
     {
         return count($domains) ? in_array($data, $domains) : $data;
     }
