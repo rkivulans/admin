@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\MailboxServiceInterface;
-use Illuminate\Http\Request;
+use App\Services\MailboxApiClientInterface;
+use App\Services\MailService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Services\MailApiTransformer;
 
 class AliasController extends Controller
 {
-    protected $mailApi;
+    protected $mailService;
 
-    public function __construct(MailboxServiceInterface $mailboxService)
+    public function __construct(MailboxApiClientInterface $apiClient)
     {
-        $this->mailApi = new MailApiTransformer($mailboxService);
+        $this->mailService = new MailService($apiClient);
     }
 
     public function index()
     {
 
         return view('aliases.index', [
-            'aliases' => $this->mailApi->getAliases()->sortBy('address'),
+            'aliases' => $this->mailService->getAliases()->sortBy('address'),
         ]);
     }
 
@@ -38,18 +38,34 @@ class AliasController extends Controller
             'forwards_to' => 'required|string',
         ]);
 
+        try {
+            $this->mailService->addAlias(
+                $validated['alias'],
+                $validated['forwards_to'],
+                ['devmail.ke.com.lv']
+                //// permitted default = null
+            );
+        } catch (\ErrorException $error) {
+            return redirect()->back()
+                ->with('error', $error->getMessage());
+        }
+
         return redirect()->route('aliases.index')
-            ->with('success', __('Alias :alias created successfully!', ['alias'=> $validated['alias'] ]))
+            ->with('success', __('Alias :alias created successfully!', ['alias' => $validated['alias']]))
             ->with('lastId', $validated['alias']);
     }
 
     public function edit($alias)
     {
-        $forwards_to = ['test2@gmail.com', 'test3@gmail.com'];
+        /// ceru ka es pareizi domaju
+        //// seit iespejams ari vajadzeja try un catch, bet pagaidam atstaju
+        $aliasData = $this->mailService->getAlias($alias, ['devmail.ke.com.lv']);
+
+        abort_unless($aliasData, 404);
 
         return view('aliases.edit', [
             'address' => $alias,
-            'forwards_to' => $forwards_to,
+            'forwards_to' => $aliasData->forwards_to,
         ]);
     }
 
@@ -60,12 +76,26 @@ class AliasController extends Controller
         ];
 
         $validated = Validator::make($formData,
-        [
-            'forwards_to.*' => 'required|email',
-        ])->validate();
+            [
+                'forwards_to.*' => 'required|email',
+            ])->validate();
+
+        try {
+            $this->mailService->updateAlias(
+                $alias,
+                $validated['forwards_to'],
+                ['devmail.ke.com.lv']
+                //// permitted default = null
+            );
+        } catch (\ErrorException $error) {
+            return redirect()->back()
+                ->with('error', $error->getMessage());
+        }
 
         return redirect()->route('aliases.index')
-        ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
+            ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
             ->with('lastId', $alias);
     }
+
+    /////destroy ? archive?
 }

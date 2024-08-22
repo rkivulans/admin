@@ -20,7 +20,11 @@
                 </p>
             </header>
 
-            <form method="POST" action="{{ route('emails.store') }}" class="mt-6 space-y-6">
+            <form
+                method="POST"
+                action="{{ route("emails.store") }}"
+                class="mt-6 space-y-6"
+            >
                 @csrf
 
                 <div>
@@ -32,7 +36,9 @@
                         class="mt-1 block w-full"
                         value="{{ old('email') }}"
                     />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2"
+                    <x-input-error
+                        :messages="$errors->get('email')"
+                        class="mt-2"
                     />
                 </div>
 
@@ -45,7 +51,9 @@
                         class="mt-1 block w-full"
                         autocomplete="new-password"
                     />
-                    <x-input-error :messages="$errors->get('password')" class="mt-2"
+                    <x-input-error
+                        :messages="$errors->get('password')"
+                        class="mt-2"
                     />
                 </div>
 
@@ -59,11 +67,24 @@
                         <option value="" disabled selected>
                             {{ __("Choose a role") }}
                         </option>
-                        <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>{{ __("User") }}</option>
-                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>{{ __("Admin") }}</option>
+
+                        @foreach ([
+                                \App\Services\MailUserPrivilegeEnum::USER,
+                                \App\Services\MailUserPrivilegeEnum::ADMIN
+                            ]
+                            as $role)
+                            <option
+                                value="{{ $role->name }}"
+                                {{ old("role") === $role->name ? "selected" : "" }}
+                            >
+                                {{ __("mailuserenum.$role->name") }}
+                            </option>
+                        @endforeach
                     </select>
-                    
-                    <x-input-error :messages="$errors->get('role')" class="mt-2"
+
+                    <x-input-error
+                        :messages="$errors->get('role')"
+                        class="mt-2"
                     />
                 </div>
 
@@ -72,7 +93,6 @@
                         {{ __("Create") }}
                     </x-primary-button>
                 </div>
-                
             </form>
         </div>
     </div>

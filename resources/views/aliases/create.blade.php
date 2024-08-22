@@ -20,7 +20,11 @@
                 </p>
             </header>
 
-            <form method="POST" action="{{ route('aliases.store') }}" class="mt-6 space-y-6">
+            <form
+                method="POST"
+                action="{{ route("aliases.store") }}"
+                class="mt-6 space-y-6"
+            >
                 @csrf
 
                 <div>
@@ -32,25 +36,34 @@
                         class="mt-1 block w-full"
                         value="{{ old('alias') }}"
                     />
-                    <x-input-error :messages="$errors->get('alias')" class="mt-2"
+                    <x-input-error
+                        :messages="$errors->get('alias')"
+                        class="mt-2"
                     />
                 </div>
 
                 <div>
-                    <x-input-label for="forwards_to" :value="__('Forwards To')" />
+                    <x-input-label
+                        for="forwards_to"
+                        :value="__('Forwards To')"
+                    />
                     <textarea
                         id="forwards_to"
                         name="forwards_to"
                         rows="3"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    >{{ old('forwards_to') }}</textarea>
-                    <x-input-error :messages="$errors->get('forwards_to')" class="mt-2" />
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm min-h-12"
+                    >
+{{ old("forwards_to") }}</textarea
+                    >
+                    <x-input-error
+                        :messages="$errors->get('forwards_to')"
+                        class="mt-2"
+                    />
                 </div>
 
                 <div class="flex items-center justify-between">
                     <x-primary-button>{{ __("Create") }}</x-primary-button>
                 </div>
-
             </form>
         </div>
     </div>

@@ -2,7 +2,7 @@
 
 return [
     'required' => 'Lauks :attribute ir obligāts.',
-    
+
     'confirmed' => 'Lauks :attribute nesakrīt.',
 
     'unique' => 'Lauks :attribute jau ir aizņemts.',
@@ -28,11 +28,11 @@ return [
     ],
 
     'password' => [
-    'letters' => 'Laukam :attribute ir jāietver vismaz viens burts.',
-    'mixed' => 'Laukam :attribute ir jāietver vismaz viens lielais un viens mazais burts.',
-    'numbers' => 'Laukam :attribute ir jāietver vismaz viens cipars.',
-    'symbols' => 'Laukam :attribute ir jāietver vismaz viens simbols.',
-    'uncompromised' => 'Norādītā :attribute ir parādījusies datu noplūdē. Lūdzu, izvēlieties citu :attribute.',
+        'letters' => 'Laukam :attribute ir jāietver vismaz viens burts.',
+        'mixed' => 'Laukam :attribute ir jāietver vismaz viens lielais un viens mazais burts.',
+        'numbers' => 'Laukam :attribute ir jāietver vismaz viens cipars.',
+        'symbols' => 'Laukam :attribute ir jāietver vismaz viens simbols.',
+        'uncompromised' => 'Norādītā :attribute ir parādījusies datu noplūdē. Lūdzu, izvēlieties citu :attribute.',
     ],
 
     'string' => 'Laukam :attribute jābūt teksta virknei.',

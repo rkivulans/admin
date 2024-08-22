@@ -1,4 +1,6 @@
 {
+    "mailuserenum.ADMIN": "Administrators",
+    "mailuserenum.USER": "Lietotājs",
     ":alias update": "Labot :alias",
     "Add a new alias to forward emails to other email addresses.": "Pievienot jaunu pāradresāciju, lai pārsūtītu e-pasta ziņojumus uz citām e-pasta adresēm.",
     "Add a new email address to your domain.": "Pievienot savai domēnai jaunu e-pasta adresi.",
