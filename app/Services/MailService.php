@@ -89,7 +89,7 @@ class MailService
         abort_unless($this->checkAccess($address, $allowedDomains), 403);
 
         $this->mailaApi->addOrUpdateMailAlias(
-            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists:0
+            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists: 0
         );
     }
 
@@ -98,7 +98,7 @@ class MailService
         abort_unless($this->checkAccess($address, $allowedDomains), 403);
 
         $this->mailaApi->addOrUpdateMailAlias(
-            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists:1
+            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists: 1
         );
     }
 

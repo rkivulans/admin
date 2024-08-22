@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
 use App\Services\MailUserPrivilegeEnum;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,18 +14,30 @@ class EmailController extends Controller
 {
     protected $mailService;
 
+    protected $userService;
+
     public function __construct(MailboxApiClientInterface $apiClient)
     {
         $this->mailService = new MailService($apiClient);
+
+        $this->userService = new UserService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+
+        /*
         $users = $this->mailService->getUsers([
             'box.devmail.ke.com.lv',
             'rihardsmail.ke.com.lv',
             'devmail.ke.com.lv',
         ])->sortBy('email');
+        */
+
+        $allowedDomains = $request->user()->domains;
+        $users = $this->mailService
+            ->getUsers($this->userService->getUserDomains($allowedDomains))
+            ->sortBy('email');
 
         return view('emails.index', [
             'users' => $users,
@@ -55,11 +68,20 @@ class EmailController extends Controller
         ]);
 
         try {
+            $allowedDomains = $request->user()->domains;
+            /*
             $this->mailService->addUser(
                 $validated['email'],
                 $validated['password'],
                 constant(MailUserPrivilegeEnum::class."::{$validated['role']}"), // TODO change to Foo::{$searchableConstant} when upgrading to php8.3,
                 ['devmail.ke.com.lv']
+            );
+            */
+            $this->mailService->addUser(
+                $validated['email'],
+                $validated['password'],
+                constant(MailUserPrivilegeEnum::class."::{$validated['role']}"),
+                $this->userService->getUserDomains($allowedDomains)
             );
         } catch (\ErrorException $error) {
             return redirect()->back()

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AliasController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('aliases', AliasController::class)
         ->only(['index', 'create', 'edit', 'store', 'update']);
+
+    Route::resource('users', UserController::class)
+        ->only(['index', 'create', 'edit', 'store']);
 });
 
 require __DIR__.'/auth.php';

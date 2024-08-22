@@ -314,3 +314,19 @@ test('test if alias is returned (superadmin)', function () use ($data) {
     expect($mailService->getAlias('userCC@domain3.example.com'))
         ->toEqual($expectedResult);
 });
+
+/*
+test('add new email if respecting domain', function () use ($data) {
+    $expectedResult = json_decode(<<<'JSON'
+    {"address":"userCC@domain3.example.com"}
+    JSON
+    );
+
+    $mailboxService = Mockery::mock(MailboxApiClientInterface::class);
+    $mailboxService->shouldReceive('getMailUsers')->andReturn($data->apiAliasResponse());
+    $mailService = new MailService($mailboxService);
+
+    expect($mailService->getAlias('userCC@domain3.example.com'))
+        ->toEqual($expectedResult);
+});
+*/
