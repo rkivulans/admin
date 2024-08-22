@@ -30,3 +30,19 @@ If you pull in and there are new dependencies added, run this to add them to you
 Pre-commit: 
 
     ./vendor/bin/pint     # formats php files under app/
+    npm run format        # folmats js and blade.php under resources/views
+
+## Translation
+
+Virsraksti: anglinki "Title Case", latviski "Pirmais teikuma burts liels"
+Jaunas lietas *izveido* (nevis pievieno)
+
+Termini:
+
+  - e-pasts
+  - pāradresācija  (Alias)
+  - pārsūtīt uz .. (Forward to ..)
+  - pastkastītes
+  - domēns
+  - infopanelis
+  - reset password - nomainīt paroli
