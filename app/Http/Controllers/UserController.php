@@ -5,35 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
-use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Hash;
+
+
 
 class UserController extends Controller
 {
     protected $mailService;
 
-    protected $userService;
+    
 
     public function __construct(MailboxApiClientInterface $apiClient)
     {
         $this->mailService = new MailService($apiClient);
-        $this->userService = new UserService;
+        
 
     }
 
     public function index()
     {
 
-        //dd(User::all());
-        $fakeData = json_decode(
-            <<<'JSON'
-        [
-        {"name": "Lauris", "email" : "lauris@inbox.lv", "domains" : "inbox.lv, devmail.com"},
-        {"name": "Janis", "email" : "janis@test.lv", "domains": "test.lv" }
-        ]
-        JSON
-        );
 
         return view('users.index', ['users' => User::all()]);
     }
@@ -54,15 +47,23 @@ class UserController extends Controller
 
         ]);
 
-        ///// need try and catch error
-
-        $this->userService->createUser(
-            $validated['name'],
-            $validated['email'],
-            $validated['domains'],
-            $validated['password']
-        );
-
+       
+        /// domain var atdalit ar "," vai 'enter' vai "space"
+        //// bet velams izmantot 1 veidu, savadak vel jafiltre tuksumi.
+        $domains = array_map(fn($domain) => trim($domain), preg_split('/((\s*,\s*)|(\r\n)|(\s+))/', $validated['domains'])); 
+        try {
+            User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'domains' => $domains ,
+                'password' => Hash::make($validated['password']),
+            ]);
+        } catch (\ErrorException $error) {
+            return redirect()->back()
+                ->with('error', $error->getMessage());
+        }
+      
+    
         return redirect()->route('users.index')
             ->with('success', __('User :user created successfully!', ['email' => $validated['email']]))
             ->with('lastId', $validated['email']);

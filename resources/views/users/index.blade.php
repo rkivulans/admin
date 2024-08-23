@@ -61,11 +61,12 @@
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
                                         >
-                                            
-                                            @foreach (explode(',', $user->domains) as $domain)
-                                                {{trim($domain)}}
+
+                                        @foreach ($user->domains as $domain)
+                                                {{$domain}}
                                                 </br>
                                             @endforeach
+                                        
                                         </td>
                                         <td
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"

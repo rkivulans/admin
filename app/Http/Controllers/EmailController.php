@@ -14,13 +14,12 @@ class EmailController extends Controller
 {
     protected $mailService;
 
-    protected $userService;
+ 
 
     public function __construct(MailboxApiClientInterface $apiClient)
     {
         $this->mailService = new MailService($apiClient);
 
-        $this->userService = new UserService;
     }
 
     public function index(Request $request)
@@ -34,9 +33,9 @@ class EmailController extends Controller
         ])->sortBy('email');
         */
 
-        $allowedDomains = $request->user()->domains;
+    
         $users = $this->mailService
-            ->getUsers($this->userService->getUserDomains($allowedDomains))
+            ->getUsers($request->user()->domains)
             ->sortBy('email');
 
         return view('emails.index', [
@@ -68,7 +67,6 @@ class EmailController extends Controller
         ]);
 
         try {
-            $allowedDomains = $request->user()->domains;
             /*
             $this->mailService->addUser(
                 $validated['email'],
@@ -81,7 +79,7 @@ class EmailController extends Controller
                 $validated['email'],
                 $validated['password'],
                 constant(MailUserPrivilegeEnum::class."::{$validated['role']}"),
-                $this->userService->getUserDomains($allowedDomains)
+                $request->user()->domains
             );
         } catch (\ErrorException $error) {
             return redirect()->back()
