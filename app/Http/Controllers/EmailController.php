@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
 use App\Services\MailUserPrivilegeEnum;
-use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,8 +12,6 @@ use Illuminate\Validation\Rule;
 class EmailController extends Controller
 {
     protected $mailService;
-
- 
 
     public function __construct(MailboxApiClientInterface $apiClient)
     {
@@ -33,7 +30,6 @@ class EmailController extends Controller
         ])->sortBy('email');
         */
 
-    
         $users = $this->mailService
             ->getUsers($request->user()->domains)
             ->sortBy('email');

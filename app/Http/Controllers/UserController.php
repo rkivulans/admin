@@ -6,27 +6,20 @@ use App\Models\User;
 use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Hash;
-
-
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     protected $mailService;
 
-    
-
     public function __construct(MailboxApiClientInterface $apiClient)
     {
         $this->mailService = new MailService($apiClient);
-        
 
     }
 
     public function index()
     {
-
 
         return view('users.index', ['users' => User::all()]);
     }
@@ -39,39 +32,91 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'domains' => ['required', 'string'],
-            'password' => ['required', Password::defaults()],
+        $formData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'domains' => explode(' ', trim(preg_replace('/[\s,]+/', ' ', $request->input('domains')))),
+        ];
 
+        $validated = Validator::make($formData,
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'domains.*' => ['required', 'string'],
+            ])->validate();
+
+        //// personigi es jau taisitu kkadu userService un tur veidotu parbaudi un ar throw excetipn kkadu
+        ///// un seit tasiitu try catch. uz abam parbaudem
+
+        /*
+        try {
+            emailExists()
+            domainsExist()
+        } catch (\Throwable $th) {
+             un seit error
+        }
+        */
+
+        /*
+         Varetu ari addUser, ja ir doma taisot useri laravela uztaisit mailboxu ari mail api, bet
+          nezinu vai tu biji ta domajis
+        */
+        if (! $this->mailService->getMailbox($validated['email'])) {
+            return redirect()->back()
+                ->with('error', "Email doesn't exist in API!");
+        }
+
+        foreach ($validated['domains'] as $domain) {
+            if ($this->mailService->getDomains()->doesntContain($domain)) {
+                return redirect()->back()
+                    ->with('error', "Atleast one of domains doesn't exist in API");
+            }
+        }
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'domains' => $validated['domains'],
         ]);
 
-       
-        /// domain var atdalit ar "," vai 'enter' vai "space"
-        //// bet velams izmantot 1 veidu, savadak vel jafiltre tuksumi.
-        $domains = array_map(fn($domain) => trim($domain), preg_split('/((\s*,\s*)|(\r\n)|(\s+))/', $validated['domains'])); 
-        try {
-            User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'domains' => $domains ,
-                'password' => Hash::make($validated['password']),
-            ]);
-        } catch (\ErrorException $error) {
-            return redirect()->back()
-                ->with('error', $error->getMessage());
-        }
-      
-    
         return redirect()->route('users.index')
             ->with('success', __('User :user created successfully!', ['email' => $validated['email']]))
             ->with('lastId', $validated['email']);
 
     }
 
-    public function edit()
+    public function edit(Request $request, User $user)
     {
-        abort(404, 'Work in progress');
+        return view('users.edit', ['user' => $user]);
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $formData = [
+            'name' => $request->input('name'),
+            'domains' => explode(' ', trim(preg_replace('/[\s,]+/', ' ', $request->input('domains')))),
+        ];
+
+        $validated = Validator::make($formData,
+            [
+                'name' => ['required', 'string', 'max:255'],
+                'domains.*' => ['required', 'string'],
+            ])->validate();
+
+        foreach ($validated['domains'] as $domain) {
+            if ($this->mailService->getDomains()->doesntContain($domain)) {
+                return redirect()->back()
+                    ->with('error', "Atleast one of domains doesn't exist in API");
+            }
+        }
+
+        $user->update([
+            'name' => $validated['name'],
+            'domains' => $validated['domains'],
+        ]);
+
+        return redirect()->route('users.index')
+            ->with('success', __('User :user updated successfully!', ['user' => $user->email]))
+            ->with('lastId', $user);
     }
 }

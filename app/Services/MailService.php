@@ -36,8 +36,7 @@ class MailService
     public function getMailbox(string $email, array $allowedDomains = [])
     {
 
-        return
-        $this->getUsers($allowedDomains)
+        return $this->getUsers($allowedDomains)
             ->whereIn('email', [$email])
             ->first(); ///// atgriez json vai null
     }

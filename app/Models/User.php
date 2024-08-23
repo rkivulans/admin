@@ -46,9 +46,4 @@ class User extends Authenticatable
             'domains' => 'array',
         ];
     }
-
-
-    public function getAllowedDomains(): array{
-        return $this->domains;
-    }
 }

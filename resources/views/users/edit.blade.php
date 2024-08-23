@@ -5,27 +5,28 @@
                 {{ __("Users") }}
             </a>
             <span class="text-gray-400">/</span>
-            <a>{{ __("Create user") }}</a>
+            {{ __(":user update", ["user" => $user->email]) }}
         </h2>
     </x-slot>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
         <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
             <header>
                 <h2 class="text-lg font-medium text-gray-900">
-                    {{ __("Create New User") }}
+                    {{ __("Update User") }}
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600">
-                    {{ __("Add a new user with available domains") }}
+                    {{ __("Update user") }}
                 </p>
             </header>
 
             <form
                 method="POST"
-                action="{{ route("users.store") }}"
+                action="{{ route("users.update", ["user" => $user]) }}"
                 class="mt-6 space-y-6"
             >
                 @csrf
+                @method("PUT")
 
                 <div>
                     <x-input-label for="name" :value="__('Name')" />
@@ -34,25 +35,10 @@
                         name="name"
                         type="text"
                         class="mt-1 block w-full"
-                        value="{{ old('name') }}"
+                        value="{{ $user->name}}"
                     />
                     <x-input-error
                         :messages="$errors->get('name')"
-                        class="mt-2"
-                    />
-                </div>
-
-                <div>
-                    <x-input-label for="email" :value="__('Email Address')" />
-                    <x-text-input
-                        id="email"
-                        name="email"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ old('email') }}"
-                    />
-                    <x-input-error
-                        :messages="$errors->get('email')"
                         class="mt-2"
                     />
                 </div>
@@ -65,7 +51,7 @@
                         rows="3"
                         class="mt-1 block w-full border-gray-300 rounded-md shadow-sm min-h-12"
                     >
-{{ old("domains") }}</textarea
+{{ old("forwards_to", implode("\n", $user->domains)) }}</textarea
                     >
                     <x-input-error
                         :messages="$errors->get('domains')"
@@ -76,10 +62,8 @@
                     @endforeach
                 </div>
 
-                <div class="flex items-center gap-4">
-                    <x-primary-button>
-                        {{ __("Create") }}
-                    </x-primary-button>
+                <div class="flex items-center justify-between">
+                    <x-primary-button>{{ __("Update") }}</x-primary-button>
                 </div>
             </form>
         </div>

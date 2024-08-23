@@ -53,26 +53,23 @@
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
                                         >
-                                           {{$user->name }} 
-                                           ({{$user->email }})
-                                            
+                                            {{ $user->name }}
+                                            ({{ $user->email }})
                                         </td>
 
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
                                         >
-
-                                        @foreach ($user->domains as $domain)
-                                                {{$domain}}
-                                                </br>
+                                            @foreach ($user->domains as $domain)
+                                                {{ $domain }}
+                                                <br />
                                             @endforeach
-                                        
                                         </td>
                                         <td
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                                         >
                                             <a
-                                                href="{{ route("users.edit", ['user' => $user->email]) }}"
+                                                href="{{ route("users.edit", ["user" => $user]) }}"
                                                 class="text-indigo-600 hover:text-indigo-900"
                                             >
                                                 {{ __("Edit") }}

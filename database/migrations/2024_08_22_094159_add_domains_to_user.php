@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('domains')
-            ->nullable(false)
-            ->after('email')
-            ->default("[]");
+                ->after('email')
+                ->default('[]');
         });
     }
 
