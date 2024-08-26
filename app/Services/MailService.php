@@ -69,9 +69,10 @@ class MailService
     {
         abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
 
-        $this->mailaApi->addMailUser(
+        return $this->mailaApi->addMailUser(
             $email, $password, $role
         );
+
     }
 
     public function setPassword(string $email, string $password, array $allowedDomains)
@@ -88,7 +89,10 @@ class MailService
         abort_unless($this->checkAccess($address, $allowedDomains), 403);
 
         $this->mailaApi->addOrUpdateMailAlias(
-            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists: 0
+            $address,
+            implode(',', $forwardsTo),
+            $permittedSenders,
+            updateIfExists: 0 ///// Unknown named parameter $updateIfExists
         );
     }
 
@@ -97,7 +101,10 @@ class MailService
         abort_unless($this->checkAccess($address, $allowedDomains), 403);
 
         $this->mailaApi->addOrUpdateMailAlias(
-            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists: 1
+            $address,
+            implode(',', $forwardsTo),
+            $permittedSenders,
+            updateIfExists:1  ///// Unknown named parameter $updateIfExists
         );
     }
 

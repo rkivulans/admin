@@ -2,6 +2,7 @@
 
 use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
+use App\Services\MailUserPrivilegeEnum;
 use Tests\TestData;
 
 $data = new TestData;
@@ -315,18 +316,20 @@ test('test if alias is returned (superadmin)', function () use ($data) {
         ->toEqual($expectedResult);
 });
 
-/*
-test('add new email if respecting domain', function () use ($data) {
-    $expectedResult = json_decode(<<<'JSON'
-    {"address":"userCC@domain3.example.com"}
-    JSON
-    );
+
+test('add new email if respecting domain', function () {
+    
 
     $mailboxService = Mockery::mock(MailboxApiClientInterface::class);
-    $mailboxService->shouldReceive('getMailUsers')->andReturn($data->apiAliasResponse());
+    $mailboxService->shouldReceive('addMailUser')->andReturn(true);
     $mailService = new MailService($mailboxService);
-
-    expect($mailService->getAlias('userCC@domain3.example.com'))
-        ->toEqual($expectedResult);
+    
+    
+    expect($mailService->addUser('testuser@domain2.example.com', '12345678', MailUserPrivilegeEnum::USER, ['domain2.example.com']))
+    ->toEqual(true);
+    
 });
-*/
+
+
+
+

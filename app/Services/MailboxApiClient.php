@@ -69,7 +69,7 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'privileges' => $privilege->value,
             ]);
 
-        return $response; /// need to delete this line after
+        return $response->successful() === 200; /// need to delete this line after
     }
 
     /// on update update_if_exists = 1, by default = 0
