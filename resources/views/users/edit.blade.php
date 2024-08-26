@@ -44,22 +44,33 @@
                 </div>
 
                 <div>
-                    <x-input-label for="domains" :value="__('Domains')" />
-                    <textarea
-                        id="domains"
-                        name="domains"
-                        rows="3"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm min-h-12"
-                    >
-{{ old("forwards_to", implode("\n", $user->domains)) }}</textarea
-                    >
-                    <x-input-error
-                        :messages="$errors->get('domains')"
-                        class="mt-2"
-                    />
-                    @foreach ($errors->get("domains.*") as $error)
-                        <x-input-error :messages="$error" class="mt-2" />
+                    <h3>Old domains:</h3>
+                    @foreach ($user->domains as $domain)
+                        <small class="text-slate-600">{{ $domain }}</small>
+                        <br />
                     @endforeach
+                </div>
+
+                <div>
+                    <label
+                        for="domains"
+                        class="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                        Select domains
+                    </label>
+                    <select
+                        required
+                        multiple
+                        id="domains"
+                        name="domains[]"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
+                        @foreach ($domains as $domain)
+                            <option class="text-base" value="{{ $domain }}">
+                                {{ $domain }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="flex items-center justify-between">

@@ -26,16 +26,16 @@ class UserController extends Controller
 
     public function create()
     {
-
-        return view('users.create', []);
+        return view('users.create', ['domains' => $this->mailService->getDomains()]);
     }
 
     public function store(Request $request)
     {
+
         $formData = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'domains' => explode(' ', trim(preg_replace('/[\s,]+/', ' ', $request->input('domains')))),
+            'domains' => $request->input('domains'),
         ];
 
         $validated = Validator::make($formData,
@@ -87,14 +87,15 @@ class UserController extends Controller
 
     public function edit(Request $request, User $user)
     {
-        return view('users.edit', ['user' => $user]);
+        return view('users.edit', ['user' => $user, 'domains' => $this->mailService->getDomains()]);
     }
 
     public function update(Request $request, User $user)
     {
+
         $formData = [
             'name' => $request->input('name'),
-            'domains' => explode(' ', trim(preg_replace('/[\s,]+/', ' ', $request->input('domains')))),
+            'domains' => $request->input('domains'),
         ];
 
         $validated = Validator::make($formData,
