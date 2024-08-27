@@ -60,39 +60,53 @@
                 <div>
                     <label
                         for="domains"
-                        class="block mb-2 text-sm font-medium text-gray-900"
+                        class="block mb-2 font-medium text-gray-900 py-4 text-lg"
                     >
                         {{ __("Select domains") }}
                     </label>
+
+                    <fieldset>
+                        <legend class="sr-only">Domains</legend>
+                        <div class="space-y-5">
+                            @foreach ($domains as $domain)
+                                <div class="relative flex items-start">
+                                    <div class="flex h-6 items-center">
+                                        <input
+                                            id="{{ $loop->index }}-domain"
+                                            @checked(in_array($domain, old("domains") ?? []))
+                                            aria-describedby="domains-description"
+                                            name="domains[]"
+                                            value="{{ $domain }}"
+                                            type="checkbox"
+                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                        />
+                                    </div>
+                                    <div class="ml-3 text-sm leading-6">
+                                        <label
+                                            for="{{ $loop->index }}-domain"
+                                            class="font-medium text-gray-900"
+                                        >
+                                            {{ $domain }}
+                                        </label>
+                                        <span
+                                            id="comments-description"
+                                            class="text-gray-500"
+                                        >
+                                            <span class="sr-only">
+                                                {{ $domain }}
+                                            </span>
+                                            Ko seit likt atstat tuksu?.
+                                        </span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </fieldset>
 
                     <x-input-error
                         :messages="$errors->get('domains')"
                         class="mt-2"
                     />
-                    <ul
-                        class="w-auto text-sm divide-y-2 font-medium text-gray-90 rounded-lg border-2 overflow-hidden"
-                    >
-                        @foreach ($domains as $domain)
-                            <li class="w-full border-gray-200">
-                                <div class="flex items-center ps-3">
-                                    <input
-                                        id="{{ $loop->index }}-domain"
-                                        @checked(in_array($domain, old("domains") ?? []))
-                                        type="checkbox"
-                                        name="domains[]"
-                                        value="{{ $domain }}"
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-700 focus:ring-2 cursor-pointer"
-                                    />
-                                    <label
-                                        for="{{ $loop->index }}-domain"
-                                        class="break-all w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer"
-                                    >
-                                        {{ $domain }}
-                                    </label>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
                 </div>
 
                 <div class="flex items-center gap-4">

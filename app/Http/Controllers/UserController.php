@@ -37,8 +37,6 @@ class UserController extends Controller
             'domains.*' => ['required', 'string'],
         ]);
 
-        dd($validated['domains']);
-
         if (! $this->mailService->getMailbox($validated['email'])) {
             return redirect()->back()
                 ->with('error', __("Email doesn't exist in API!"));
