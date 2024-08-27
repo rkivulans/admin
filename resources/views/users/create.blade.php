@@ -58,23 +58,16 @@
                 </div>
 
                 <div>
-                    <label
-                        for="domains"
-                        class="block mb-2 font-medium text-gray-900 py-4 text-lg"
-                    >
-                        {{ __("Select domains") }}
-                    </label>
-
+                    <x-input-label :value="__('Domains')" class="mb-2" />
                     <fieldset>
-                        <legend class="sr-only">Domains</legend>
-                        <div class="space-y-5">
+                        <legend class="sr-only">__('Domains')</legend>
+                        <div class="space-y-2">
                             @foreach ($domains as $domain)
                                 <div class="relative flex items-start">
                                     <div class="flex h-6 items-center">
                                         <input
                                             id="{{ $loop->index }}-domain"
                                             @checked(in_array($domain, old("domains") ?? []))
-                                            aria-describedby="domains-description"
                                             name="domains[]"
                                             value="{{ $domain }}"
                                             type="checkbox"
@@ -84,19 +77,10 @@
                                     <div class="ml-3 text-sm leading-6">
                                         <label
                                             for="{{ $loop->index }}-domain"
-                                            class="font-medium text-gray-900"
+                                            class="text-gray-900"
                                         >
                                             {{ $domain }}
                                         </label>
-                                        <span
-                                            id="comments-description"
-                                            class="text-gray-500"
-                                        >
-                                            <span class="sr-only">
-                                                {{ $domain }}
-                                            </span>
-                                            Ko seit likt atstat tuksu?.
-                                        </span>
                                     </div>
                                 </div>
                             @endforeach
@@ -105,6 +89,10 @@
 
                     <x-input-error
                         :messages="$errors->get('domains')"
+                        class="mt-2"
+                    />
+                    <x-input-error
+                        :messages="$errors->get('domains.*')"
                         class="mt-2"
                     />
                 </div>

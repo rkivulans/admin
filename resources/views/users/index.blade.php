@@ -53,8 +53,7 @@
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
                                         >
-                                            {{ $user->name }}
-                                            ({{ $user->email }})
+                                            {{ $user->email }}
                                         </td>
 
                                         <td

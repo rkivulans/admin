@@ -44,33 +44,43 @@
                 </div>
 
                 <div>
-                    <h3>{{ __("Old domains:") }}</h3>
-                    @foreach ($user->domains as $domain)
-                        <small class="text-slate-600">{{ $domain }}</small>
-                        <br />
-                    @endforeach
-                </div>
+                    <x-input-label :value="__('Domains')" class="mb-2" />
+                    <fieldset>
+                        <legend class="sr-only">__('Domains')</legend>
+                        <div class="space-y-2">
+                            @foreach ($domains as $domain)
+                                <div class="relative flex items-start">
+                                    <div class="flex h-6 items-center">
+                                        <input
+                                            id="{{ $loop->index }}-domain"
+                                            @checked(in_array($domain, old("domains") ?? $user->domains))
+                                            name="domains[]"
+                                            value="{{ $domain }}"
+                                            type="checkbox"
+                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                        />
+                                    </div>
+                                    <div class="ml-3 text-sm leading-6">
+                                        <label
+                                            for="{{ $loop->index }}-domain"
+                                            class="text-gray-900"
+                                        >
+                                            {{ $domain }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </fieldset>
 
-                <div>
-                    <label
-                        for="domains"
-                        class="block mb-2 text-sm font-medium text-gray-900"
-                    >
-                        {{ __("Select domains") }}
-                    </label>
-                    <select
-                        required
-                        multiple
-                        id="domains"
-                        name="domains[]"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                        @foreach ($domains as $domain)
-                            <option class="text-base" value="{{ $domain }}">
-                                {{ $domain }}
-                            </option>
-                        @endforeach
-                    </select>
+                    <x-input-error
+                        :messages="$errors->get('domains')"
+                        class="mt-2"
+                    />
+                    <x-input-error
+                        :messages="$errors->get('domains.*')"
+                        class="mt-2"
+                    />
                 </div>
 
                 <div class="flex items-center justify-between">
