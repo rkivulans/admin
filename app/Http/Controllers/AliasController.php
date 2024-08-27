@@ -65,7 +65,7 @@ class AliasController extends Controller
         //// seit iespejams ari vajadzeja try un catch, bet pagaidam atstaju
         $aliasData = $this->mailService->getAlias($alias, $request->user()->domains);
 
-       // dd($aliasData);
+        // dd($aliasData);
 
         abort_unless($aliasData, 404);
 

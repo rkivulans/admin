@@ -64,19 +64,35 @@
                     >
                         {{ __("Select domains") }}
                     </label>
-                    <select
-                        required
-                        multiple
-                        id="domains"
-                        name="domains[]"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+
+                    <x-input-error
+                        :messages="$errors->get('domains')"
+                        class="mt-2"
+                    />
+                    <ul
+                        class="w-auto text-sm divide-y-2 font-medium text-gray-90 rounded-lg border-2 overflow-hidden"
                     >
                         @foreach ($domains as $domain)
-                            <option class="text-base" value="{{ $domain }}">
-                                {{ $domain }}
-                            </option>
+                            <li class="w-full border-gray-200">
+                                <div class="flex items-center ps-3">
+                                    <input
+                                        id="{{ $loop->index }}-domain"
+                                        @checked(in_array($domain, old("domains") ?? []))
+                                        type="checkbox"
+                                        name="domains[]"
+                                        value="{{ $domain }}"
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-700 focus:ring-2 cursor-pointer"
+                                    />
+                                    <label
+                                        for="{{ $loop->index }}-domain"
+                                        class="break-all w-full py-3 ms-2 text-sm font-medium text-gray-900 cursor-pointer"
+                                    >
+                                        {{ $domain }}
+                                    </label>
+                                </div>
+                            </li>
                         @endforeach
-                    </select>
+                    </ul>
                 </div>
 
                 <div class="flex items-center gap-4">

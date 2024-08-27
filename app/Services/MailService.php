@@ -104,12 +104,12 @@ class MailService
             $address,
             implode(',', $forwardsTo),
             $permittedSenders,
-            updateIfExists:1  ///// Unknown named parameter $updateIfExists
+            updateIfExists: 1  ///// Unknown named parameter $updateIfExists
         );
     }
 
     protected function domainFilter($data, $domains)
     {
-        return in_array("*", $domains) ? $data : in_array($data, $domains);
+        return in_array('*', $domains) ? $data : in_array($data, $domains);
     }
 }

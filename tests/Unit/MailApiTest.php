@@ -316,9 +316,8 @@ test('test if alias is returned (superadmin)', function () use ($data) {
         ->toEqual($expectedResult);
 });
 
+test('add new email if respecting domain', function () use ($data) {
 
-test('add new email if respecting domain', function () use($data) {
-    
     $expectedResult = collect([
         (object) [
             'domain' => 'domain1.example.com',
@@ -345,18 +344,16 @@ test('add new email if respecting domain', function () use($data) {
     $mailboxService->shouldReceive('addMailUser')->andReturn(true);
     $mailboxService->shouldReceive('getMailUsers')->andReturn($data->apiAddMailResponse());
     $mailService = new MailService($mailboxService);
-    
-    
+
     expect($mailService->addUser('testuser@domain2.example.com', '12345678', MailUserPrivilegeEnum::USER, ['domain2.example.com']))
-    ->toEqual(true);
+        ->toEqual(true);
 
     expect($expectedResult)
-    ->toEqual($expectedResult);
+        ->toEqual($expectedResult);
 });
 
+test('add new email if respecting domain', function () use ($data) {
 
-test('add new email if respecting domain', function () use($data) {
-    
     $expectedResult = collect([
         (object) [
             'domain' => 'domain1.example.com',
@@ -383,15 +380,10 @@ test('add new email if respecting domain', function () use($data) {
     $mailboxService->shouldReceive('addMailUser')->andReturn(true);
     $mailboxService->shouldReceive('getMailUsers')->andReturn($data->apiAddMailResponse());
     $mailService = new MailService($mailboxService);
-    
-    
+
     expect($mailService->addUser('testuser@domain2.example.com', '12345678', MailUserPrivilegeEnum::USER, ['domain2.example.com']))
-    ->toEqual(true);
+        ->toEqual(true);
 
     expect($expectedResult)
-    ->toEqual($expectedResult);
+        ->toEqual($expectedResult);
 });
-
-
-
-

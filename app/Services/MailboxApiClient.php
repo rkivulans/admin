@@ -28,7 +28,7 @@ class MailboxApiClient implements MailboxApiClientInterface
             ->withUrlParameters([
                 'endpoint' => $this->server,
             ]);
-          
+
     }
 
     public function getMailUsers(): Collection
@@ -84,7 +84,8 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'forwards_to' => $forwardsTo,
                 'permitted_senders' => $permittedSenders,
             ])->body();
-                dd($response);
+        dd($response);
+
         return $response; /// delete
     }
 
