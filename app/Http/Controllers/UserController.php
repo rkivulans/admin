@@ -23,43 +23,19 @@ class UserController extends Controller
         return view('users.index', ['users' => User::all()]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        return view('users.create', ['domains' => $this->mailService->getDomains()]);
+        return view('users.create', ['domains' => $this->mailService->getDomains(['*'])]);
     }
 
     public function store(Request $request)
     {
-
-        $formData = [
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'domains' => $request->input('domains'),
-        ];
-
-        $validated = Validator::make($formData,
-            [
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-                'domains.*' => ['required', 'string'],
-            ])->validate();
-
-        //// personigi es jau taisitu kkadu userService un tur veidotu parbaudi un ar throw excetipn kkadu
-        ///// un seit tasiitu try catch. uz abam parbaudem
-
-        /*
-        try {
-            emailExists()
-            domainsExist()
-        } catch (\Throwable $th) {
-             un seit error
-        }
-        */
-
-        /*
-         Varetu ari addUser, ja ir doma taisot useri laravela uztaisit mailboxu ari mail api, bet
-          nezinu vai tu biji ta domajis
-        */
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'domains.*' => ['required', 'string'],
+        ]);
+        
         if (! $this->mailService->getMailbox($validated['email'])) {
             return redirect()->back()
                 ->with('error', __("Email doesn't exist in API!"));
@@ -72,11 +48,7 @@ class UserController extends Controller
             }
         }
 
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'domains' => $validated['domains'],
-        ]);
+        User::create($validated);
 
         return redirect()->route('users.index')
             ->with('success', __('User :user created successfully!', ['email' => $validated['email']]))
@@ -86,7 +58,7 @@ class UserController extends Controller
 
     public function edit(Request $request, User $user)
     {
-        return view('users.edit', ['user' => $user, 'domains' => $this->mailService->getDomains()]);
+        return view('users.edit', ['user' => $user, 'domains' => $this->mailService->getDomains(['*'])]);
     }
 
     public function update(Request $request, User $user)

@@ -52,7 +52,7 @@ class MailService
 
     protected function checkAccess($email, $allowedDomains = []): bool
     {
-        if (! count($allowedDomains)) { // for superadmin
+        if (in_array('*', $allowedDomains)) { // for superadmin
             return true;
         }
 
@@ -65,7 +65,7 @@ class MailService
         return false;
     }
 
-    public function addUser(string $email, string $password, MailUserPrivilegeEnum $role, array $allowedDomains = [])
+    public function addUser(string $email, string $password, array $allowedDomains = [], MailUserPrivilegeEnum $role = MailUserPrivilegeEnum::USER)
     {
         abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
 
@@ -92,7 +92,7 @@ class MailService
             $address,
             implode(',', $forwardsTo),
             $permittedSenders,
-            updateIfExists: 0 ///// Unknown named parameter $updateIfExists
+            updateIfExists: 0
         );
     }
 
@@ -110,6 +110,6 @@ class MailService
 
     protected function domainFilter($data, $domains)
     {
-        return count($domains) ? in_array($data, $domains) : $data;
+        return in_array("*", $domains) ? $data : in_array($data, $domains);
     }
 }

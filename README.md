@@ -22,6 +22,7 @@ In parallel:
 
     php artisan serve
     npm run dev
+    php artisan migrate
 
 If you pull in and there are new dependencies added, run this to add them to your pc:
 

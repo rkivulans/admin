@@ -21,18 +21,10 @@ class EmailController extends Controller
 
     public function index(Request $request)
     {
-
-        /*
-        $users = $this->mailService->getUsers([
-            'box.devmail.ke.com.lv',
-            'rihardsmail.ke.com.lv',
-            'devmail.ke.com.lv',
-        ])->sortBy('email');
-        */
-
         $users = $this->mailService
             ->getUsers($request->user()->domains)
             ->sortBy('email');
+        
 
         return view('emails.index', [
             'users' => $users,
@@ -52,30 +44,14 @@ class EmailController extends Controller
         $validated = $request->validate([
             'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
-            'role' => [
-                'required',
-                'string',
-                Rule::in([
-                    MailUserPrivilegeEnum::ADMIN->name,
-                    MailUserPrivilegeEnum::USER->name,
-                ]),
-            ],
         ]);
 
         try {
-            /*
+
             $this->mailService->addUser(
                 $validated['email'],
                 $validated['password'],
-                constant(MailUserPrivilegeEnum::class."::{$validated['role']}"), // TODO change to Foo::{$searchableConstant} when upgrading to php8.3,
-                ['devmail.ke.com.lv']
-            );
-            */
-            $this->mailService->addUser(
-                $validated['email'],
-                $validated['password'],
-                constant(MailUserPrivilegeEnum::class."::{$validated['role']}"),
-                $request->user()->domains
+                $request->user()->domains,
             );
         } catch (\ErrorException $error) {
             return redirect()->back()
@@ -105,7 +81,7 @@ class EmailController extends Controller
 
         try {
             $this->mailService->setPassword(
-                $user, $validated['password'], ['devmail.ke.com.lv']
+                $user, $validated['password'], $request->user()->domains
             );
         } catch (\ErrorException $error) {
             return redirect()->back()

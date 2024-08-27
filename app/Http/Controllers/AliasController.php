@@ -48,7 +48,6 @@ class AliasController extends Controller
                 $validated['alias'],
                 $validated['forwards_to'],
                 $request->user()->domains,
-                permittedSenders: null
             );
         } catch (\ErrorException $error) {
             return redirect()->back()
@@ -65,6 +64,8 @@ class AliasController extends Controller
         /// ceru ka es pareizi domaju
         //// seit iespejams ari vajadzeja try un catch, bet pagaidam atstaju
         $aliasData = $this->mailService->getAlias($alias, $request->user()->domains);
+
+       // dd($aliasData);
 
         abort_unless($aliasData, 404);
 
@@ -90,7 +91,6 @@ class AliasController extends Controller
                 $alias,
                 $validated['forwards_to'],
                 $request->user()->domains,
-                permittedSenders: null
             );
         } catch (\ErrorException $error) {
             return redirect()->back()
