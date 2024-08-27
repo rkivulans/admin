@@ -16,7 +16,7 @@
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600">
-                    {{ __("Update user") }}
+                    {{ __("Update Existing User") }}
                 </p>
             </header>
 
@@ -44,7 +44,7 @@
                 </div>
 
                 <div>
-                    <h3>Old domains:</h3>
+                    <h3>{{ __("Old domains:") }}</h3>
                     @foreach ($user->domains as $domain)
                         <small class="text-slate-600">{{ $domain }}</small>
                         <br />
@@ -56,7 +56,7 @@
                         for="domains"
                         class="block mb-2 text-sm font-medium text-gray-900"
                     >
-                        Select domains
+                        {{ __("Select domains") }}
                     </label>
                     <select
                         required

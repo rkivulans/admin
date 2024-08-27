@@ -62,13 +62,13 @@ class UserController extends Controller
         */
         if (! $this->mailService->getMailbox($validated['email'])) {
             return redirect()->back()
-                ->with('error', "Email doesn't exist in API!");
+                ->with('error', __("Email doesn't exist in API!"));
         }
 
         foreach ($validated['domains'] as $domain) {
             if ($this->mailService->getDomains()->doesntContain($domain)) {
                 return redirect()->back()
-                    ->with('error', "Atleast one of domains doesn't exist in API");
+                    ->with('error', __("Atleast one of domains doesn't exist in API"));
             }
         }
 
@@ -106,7 +106,7 @@ class UserController extends Controller
         foreach ($validated['domains'] as $domain) {
             if ($this->mailService->getDomains()->doesntContain($domain)) {
                 return redirect()->back()
-                    ->with('error', "Atleast one of domains doesn't exist in API");
+                    ->with('error', __("Atleast one of domains doesn't exist in API"));
             }
         }
 

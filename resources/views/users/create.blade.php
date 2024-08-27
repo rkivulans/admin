@@ -62,7 +62,7 @@
                         for="domains"
                         class="block mb-2 text-sm font-medium text-gray-900"
                     >
-                        Select domains
+                        {{ __("Select domains") }}
                     </label>
                     <select
                         required
