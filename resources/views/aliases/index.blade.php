@@ -52,8 +52,7 @@
                                     >
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
-                                        >
-                                            {{ $alias->address_display }}
+                                        >   {{ $alias->address_display }} 
                                         </td>
                                         <td
                                             class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500"
@@ -66,6 +65,7 @@
                                         <td
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                                         >
+                                            @if ($alias->auto==false)
                                             <a
                                                 href="{{ route("aliases.edit", ["alias" => $alias->address]) }}"
                                                 class="text-indigo-600 hover:text-indigo-900"
@@ -76,6 +76,7 @@
                                                     {{ $alias->address_display }}
                                                 </span>
                                             </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
