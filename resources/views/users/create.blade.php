@@ -84,6 +84,27 @@
                                     </div>
                                 </div>
                             @endforeach
+
+                            <div class="relative flex items-start">
+                                <div class="flex h-6 items-center">
+                                    <input
+                                        id="all-domains"
+                                        @checked(in_array("*", old("domains") ?? []))
+                                        name="domains[]"
+                                        value="*"
+                                        type="checkbox"
+                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                </div>
+                                <div class="ml-3 text-sm leading-6">
+                                    <label
+                                        for="all-domains"
+                                        class="text-gray-900"
+                                    >
+                                        {{ __("Admin for all domains") }}
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
 
