@@ -9,7 +9,7 @@ require 'recipe/laravel.php';
 
 // Config
 
-set('repository', 'ssh://gitea@gitea.kecom.lv:48422/keco/mailadmin.git');
+set('repository', 'ssh://gitea@gitea.kecom.lv:48422/kecom/mailadmin.git');
 
 add('shared_files', [
     'database/database.sqlite',
