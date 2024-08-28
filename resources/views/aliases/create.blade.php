@@ -59,6 +59,9 @@
                         :messages="$errors->get('forwards_to')"
                         class="mt-2"
                     />
+                    @foreach ($errors->get("forwards_to.*") as $error)
+                        <x-input-error :messages="$error" class="mt-2" />
+                    @endforeach
                 </div>
 
                 <div class="flex items-center justify-between">

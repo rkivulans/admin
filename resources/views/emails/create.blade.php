@@ -57,37 +57,6 @@
                     />
                 </div>
 
-                <div>
-                    <x-input-label for="role" :value="__('Role')" />
-                    <select
-                        id="role"
-                        name="role"
-                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"
-                    >
-                        <option value="" disabled selected>
-                            {{ __("Choose a role") }}
-                        </option>
-
-                        @foreach ([
-                                \App\Services\MailUserPrivilegeEnum::USER,
-                                \App\Services\MailUserPrivilegeEnum::ADMIN
-                            ]
-                            as $role)
-                            <option
-                                value="{{ $role->name }}"
-                                {{ old("role") === $role->name ? "selected" : "" }}
-                            >
-                                {{ __("mailuserenum.$role->name") }}
-                            </option>
-                        @endforeach
-                    </select>
-
-                    <x-input-error
-                        :messages="$errors->get('role')"
-                        class="mt-2"
-                    />
-                </div>
-
                 <div class="flex items-center gap-4">
                     <x-primary-button>
                         {{ __("Create") }}

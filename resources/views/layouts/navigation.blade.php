@@ -36,8 +36,8 @@
                     </x-nav-link>
 
                     <x-nav-link
-                        :href="route('aliases.index')"
-                        :active="request()->routeIs('aliases.*')"
+                        :href="route('users.index')"
+                        :active="request()->routeIs('users.*')"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -149,16 +149,23 @@
 
             <x-responsive-nav-link
                 :href="route('emails.index')"
-                :active="request()->routeIs('emails.index')"
+                :active="request()->routeIs('emails.*')"
             >
                 {{ __("Mailboxes") }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link
                 :href="route('aliases.index')"
-                :active="request()->routeIs('aliases.index')"
+                :active="request()->routeIs('aliases.*')"
             >
                 {{ __("Aliases") }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link
+                :href="route('users.index')"
+                :active="request()->routeIs('users.*')"
+            >
+                {{ __("Users") }}
             </x-responsive-nav-link>
         </div>
 

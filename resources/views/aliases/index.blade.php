@@ -66,16 +66,18 @@
                                         <td
                                             class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                                         >
-                                            <a
-                                                href="{{ route("aliases.edit", ["alias" => $alias->address]) }}"
-                                                class="text-indigo-600 hover:text-indigo-900"
-                                            >
-                                                {{ __("Edit") }}
-                                                <span class="sr-only">
-                                                    ,
-                                                    {{ $alias->address_display }}
-                                                </span>
-                                            </a>
+                                            @if ($alias->auto == false)
+                                                <a
+                                                    href="{{ route("aliases.edit", ["alias" => $alias->address]) }}"
+                                                    class="text-indigo-600 hover:text-indigo-900"
+                                                >
+                                                    {{ __("Edit") }}
+                                                    <span class="sr-only">
+                                                        ,
+                                                        {{ $alias->address_display }}
+                                                    </span>
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

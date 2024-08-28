@@ -2,6 +2,7 @@
 
 use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
+use App\Services\MailUserPrivilegeEnum;
 use Tests\TestData;
 
 $data = new TestData;
@@ -312,5 +313,77 @@ test('test if alias is returned (superadmin)', function () use ($data) {
     $mailService = new MailService($mailboxService);
 
     expect($mailService->getAlias('userCC@domain3.example.com'))
+        ->toEqual($expectedResult);
+});
+
+test('add new email if respecting domain', function () use ($data) {
+
+    $expectedResult = collect([
+        (object) [
+            'domain' => 'domain1.example.com',
+            'users' => [
+                (object) ['email' => 'userAA@domain1.example.com'],
+            ],
+        ],
+        (object) [
+            'domain' => 'domain2.example.com',
+            'users' => [
+                (object) ['email' => 'userCC@domain2.example.com'],
+                (object) ['email' => 'testuser@domain2.example.com'],
+            ],
+        ],
+        (object) [
+            'domain' => 'domain3.example.com',
+            'users' => [
+                (object) ['email' => 'userCC@domain3.example.com'],
+            ],
+        ],
+    ]);
+
+    $mailboxService = Mockery::mock(MailboxApiClientInterface::class);
+    $mailboxService->shouldReceive('addMailUser')->andReturn(true);
+    $mailboxService->shouldReceive('getMailUsers')->andReturn($data->apiAddMailResponse());
+    $mailService = new MailService($mailboxService);
+
+    expect($mailService->addUser('testuser@domain2.example.com', '12345678', MailUserPrivilegeEnum::USER, ['domain2.example.com']))
+        ->toEqual(true);
+
+    expect($expectedResult)
+        ->toEqual($expectedResult);
+});
+
+test('add new email if respecting domain', function () use ($data) {
+
+    $expectedResult = collect([
+        (object) [
+            'domain' => 'domain1.example.com',
+            'users' => [
+                (object) ['email' => 'userAA@domain1.example.com'],
+            ],
+        ],
+        (object) [
+            'domain' => 'domain2.example.com',
+            'users' => [
+                (object) ['email' => 'userCC@domain2.example.com'],
+                (object) ['email' => 'testuser@domain2.example.com'],
+            ],
+        ],
+        (object) [
+            'domain' => 'domain3.example.com',
+            'users' => [
+                (object) ['email' => 'userCC@domain3.example.com'],
+            ],
+        ],
+    ]);
+
+    $mailboxService = Mockery::mock(MailboxApiClientInterface::class);
+    $mailboxService->shouldReceive('addMailUser')->andReturn(true);
+    $mailboxService->shouldReceive('getMailUsers')->andReturn($data->apiAddMailResponse());
+    $mailService = new MailService($mailboxService);
+
+    expect($mailService->addUser('testuser@domain2.example.com', '12345678', MailUserPrivilegeEnum::USER, ['domain2.example.com']))
+        ->toEqual(true);
+
+    expect($expectedResult)
         ->toEqual($expectedResult);
 });

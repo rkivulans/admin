@@ -9,7 +9,7 @@ return [
 
     'current_password' => 'Parole ir nepareiza.',
 
-    'mail' => 'Laukam :attribute jābūt e-pasta adresei.',
+    'email' => 'Laukam :attribute jābūt e-pasta adresei.',
 
     'lowercase' => 'Laukam :attribute ir jābūt rakstītam ar mazajiem burtiem.',
 

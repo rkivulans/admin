@@ -27,6 +27,10 @@ If you pull in and there are new dependencies added, run this to add them to you
 
     composer install && npm clean-install
 
+If you pull in and there are new migrations added, run this to migrate:
+
+    php artisan migrate
+
 Pre-commit: 
 
     ./vendor/bin/pint     # formats php files under app/

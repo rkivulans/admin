@@ -27,8 +27,8 @@ class MailboxApiClient implements MailboxApiClientInterface
         return Http::withBasicAuth($this->user, $this->password)
             ->withUrlParameters([
                 'endpoint' => $this->server,
-            ])
-            ->throw();
+            ]);
+
     }
 
     public function getMailUsers(): Collection
@@ -83,7 +83,8 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'address' => $address,
                 'forwards_to' => $forwardsTo,
                 'permitted_senders' => $permittedSenders,
-            ]);
+            ])->body();
+        
 
         return $response; /// delete
     }

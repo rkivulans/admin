@@ -36,8 +36,7 @@ class MailService
     public function getMailbox(string $email, array $allowedDomains = [])
     {
 
-        return
-        $this->getUsers($allowedDomains)
+        return $this->getUsers($allowedDomains)
             ->whereIn('email', [$email])
             ->first(); ///// atgriez json vai null
     }
@@ -53,7 +52,7 @@ class MailService
 
     protected function checkAccess($email, $allowedDomains = []): bool
     {
-        if (! count($allowedDomains)) { // for superadmin
+        if (in_array('*', $allowedDomains)) { // for superadmin
             return true;
         }
 
@@ -66,13 +65,14 @@ class MailService
         return false;
     }
 
-    public function addUser(string $email, string $password, MailUserPrivilegeEnum $role, array $allowedDomains = [])
+    public function addUser(string $email, string $password, array $allowedDomains = [], MailUserPrivilegeEnum $role = MailUserPrivilegeEnum::USER)
     {
         abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
 
-        $this->mailaApi->addMailUser(
+         $this->mailaApi->addMailUser(
             $email, $password, $role
         );
+
     }
 
     public function setPassword(string $email, string $password, array $allowedDomains)
@@ -89,7 +89,10 @@ class MailService
         abort_unless($this->checkAccess($address, $allowedDomains), 403);
 
         $this->mailaApi->addOrUpdateMailAlias(
-            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists:0
+            $address,
+            implode(',', $forwardsTo),
+            $permittedSenders,
+            updateIfExists: 0
         );
     }
 
@@ -98,12 +101,15 @@ class MailService
         abort_unless($this->checkAccess($address, $allowedDomains), 403);
 
         $this->mailaApi->addOrUpdateMailAlias(
-            $address, implode(',', $forwardsTo), $permittedSenders, updateIfExists:1
+            $address,
+            implode(',', $forwardsTo),
+            $permittedSenders,
+            updateIfExists: 1  ///// Unknown named parameter $updateIfExists
         );
     }
 
     protected function domainFilter($data, $domains)
     {
-        return count($domains) ? in_array($data, $domains) : $data;
+        return in_array('*', $domains) ? $data : in_array($data, $domains);
     }
 }

@@ -17,11 +17,11 @@ class AliasController extends Controller
         $this->mailService = new MailService($apiClient);
     }
 
-    public function index()
+    public function index(Request $request)
     {
 
         return view('aliases.index', [
-            'aliases' => $this->mailService->getAliases()->sortBy('address'),
+            'aliases' => $this->mailService->getAliases($request->user()->domains)->sortBy('address'),
         ]);
     }
 
@@ -33,17 +33,21 @@ class AliasController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
+        $formData = [
+            'alias' => $request->input('alias'),
+            'forwards_to' => explode(' ', trim(preg_replace('/[\s,]+/', ' ', $request->input('forwards_to')))),
+        ];
+
+        $validated = Validator::make($formData, [
             'alias' => 'required|email|max:255',
-            'forwards_to' => 'required|string',
-        ]);
+            'forwards_to.*' => 'required|email',
+        ])->validate();
 
         try {
             $this->mailService->addAlias(
                 $validated['alias'],
                 $validated['forwards_to'],
-                ['devmail.ke.com.lv']
-                //// permitted default = null
+                $request->user()->domains,
             );
         } catch (\ErrorException $error) {
             return redirect()->back()
@@ -55,11 +59,13 @@ class AliasController extends Controller
             ->with('lastId', $validated['alias']);
     }
 
-    public function edit($alias)
+    public function edit(Request $request, $alias)
     {
         /// ceru ka es pareizi domaju
         //// seit iespejams ari vajadzeja try un catch, bet pagaidam atstaju
-        $aliasData = $this->mailService->getAlias($alias, ['devmail.ke.com.lv']);
+        $aliasData = $this->mailService->getAlias($alias, $request->user()->domains);
+
+        // dd($aliasData);
 
         abort_unless($aliasData, 404);
 
@@ -72,7 +78,7 @@ class AliasController extends Controller
     public function update(Request $request, $alias): RedirectResponse
     {
         $formData = [
-            'forwards_to' => explode("\r\n", $request->input('forwards_to')),
+            'forwards_to' => explode(' ', trim(preg_replace('/[\s,]+/', ' ', $request->input('forwards_to')))),
         ];
 
         $validated = Validator::make($formData,
@@ -84,8 +90,7 @@ class AliasController extends Controller
             $this->mailService->updateAlias(
                 $alias,
                 $validated['forwards_to'],
-                ['devmail.ke.com.lv']
-                //// permitted default = null
+                $request->user()->domains,
             );
         } catch (\ErrorException $error) {
             return redirect()->back()
