@@ -69,7 +69,7 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'privileges' => $privilege->value,
             ]);
 
-        return $response->successful() === 200; /// need to delete this line after
+        return $response; /// need to delete this line after
     }
 
     /// on update update_if_exists = 1, by default = 0
@@ -84,7 +84,7 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'forwards_to' => $forwardsTo,
                 'permitted_senders' => $permittedSenders,
             ])->body();
-        dd($response);
+        
 
         return $response; /// delete
     }
