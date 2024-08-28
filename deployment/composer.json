@@ -1,0 +1,8 @@
+{
+    "name": "kecom/mailadmin",
+    "type": "project",
+    "require": {
+        "php": "^8.2",
+        "deployer/deployer": "^7.3"
+    }
+}

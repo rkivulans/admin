@@ -1,0 +1,31 @@
+name: Deploy mailadmin.kecom.lv
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Deploy-Production:
+    name: Deploy admin panel (main) to mailadmin.kecom.lv
+    runs-on: dplcnt-latest
+    steps:
+      - uses: https://gitea.kecom.lv/actions/checkout@v4
+      - name: setup ssh
+        run: |
+          umask 077
+          mkdir -p $HOME/.ssh
+          echo "$SSH_KNOWN_HOSTS" >> $HOME/.ssh/known_hosts
+        env:
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+      - name: install deployer
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        working-directory: deployment
+      - name: deploy
+        run: |
+          eval $(ssh-agent -s)
+          ssh-add - <<< "$SSH_PRIVATE_KEY"
+          ../vendor/bin/dep deploy --tag=${{ env.GITHUB_REF }}
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        working-directory: deployment/mailadmin.kecom.lv
