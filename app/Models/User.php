@@ -46,4 +46,9 @@ class User extends Authenticatable
             'domains' => 'array',
         ];
     }
+
+    public function isSuperAdmin(): bool
+    {
+        return in_array('*', $this->domains);
+    }
 }

@@ -84,7 +84,6 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'forwards_to' => $forwardsTo,
                 'permitted_senders' => $permittedSenders,
             ])->body();
-        
 
         return $response; /// delete
     }
