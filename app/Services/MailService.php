@@ -50,7 +50,7 @@ class MailService
             ->first();   ///// atgriez json vai null
     }
 
-    protected function checkAccess($email, $allowedDomains = []): bool
+    public function checkAccess($email, $allowedDomains = []): bool
     {
         if (in_array('*', $allowedDomains)) { // for superadmin
             return true;
@@ -86,7 +86,7 @@ class MailService
 
     public function addAlias(string $address, array $forwardsTo, array $allowedDomains = [], ?string $permittedSenders = null)
     {
-        abort_unless($this->checkAccess($address, $allowedDomains), 403);
+        abort_unless($this->checkAccess($address, $allowedDomains), 403, 'You have no permision to this domain!');
 
         $this->mailaApi->addOrUpdateMailAlias(
             $address,

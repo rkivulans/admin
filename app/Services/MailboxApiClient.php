@@ -27,7 +27,7 @@ class MailboxApiClient implements MailboxApiClientInterface
         return Http::withBasicAuth($this->user, $this->password)
             ->withUrlParameters([
                 'endpoint' => $this->server,
-            ]);
+            ])->throw();
 
     }
 
@@ -61,15 +61,16 @@ class MailboxApiClient implements MailboxApiClientInterface
 
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
     {
-        $response = $this->httpCall()
+             $this->httpCall()
             ->asForm()    ///->dd()
             ->post('{+endpoint}/mail/users/add', [
                 'email' => $email,
                 'password' => $password,
                 'privileges' => $privilege->value,
             ]);
+        
 
-        return $response; /// need to delete this line after
+        //return $response; /// need to delete this line after
     }
 
     /// on update update_if_exists = 1, by default = 0
@@ -83,7 +84,7 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'address' => $address,
                 'forwards_to' => $forwardsTo,
                 'permitted_senders' => $permittedSenders,
-            ])->body();
+            ]);
 
         return $response; /// delete
     }

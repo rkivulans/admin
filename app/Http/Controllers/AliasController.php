@@ -7,6 +7,7 @@ use App\Services\MailService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AliasController extends Controller
 {
@@ -43,16 +44,19 @@ class AliasController extends Controller
             'forwards_to.*' => 'required|email',
         ])->validate();
 
-        try {
+        if(!$this->mailService->checkAccess($validated['alias'], $request->user()->domains)){
+            return redirect()->back()
+                ->with('error', 'You have no permision to this domain!')
+                ->withInput();
+        };
+
+        
             $this->mailService->addAlias(
                 $validated['alias'],
                 $validated['forwards_to'],
                 $request->user()->domains,
             );
-        } catch (\ErrorException $error) {
-            return redirect()->back()
-                ->with('error', $error->getMessage());
-        }
+        
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias created successfully!', ['alias' => $validated['alias']]))
