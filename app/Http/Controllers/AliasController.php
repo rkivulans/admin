@@ -45,7 +45,7 @@ class AliasController extends Controller
 
         if (! $this->mailService->checkAccess($validated['alias'], $request->user()->domains)) {
             return redirect()->back()
-                ->with('error', 'You have no permision to this domain!')
+                ->with('error', __("You have no permision to this domain!"))
                 ->withInput();
         }
 
