@@ -38,10 +38,13 @@ class AliasController extends Controller
             'forwards_to' => explode(' ', trim(preg_replace('/[\s,]+/', ' ', $request->input('forwards_to')))),
         ];
 
+     
         $validated = Validator::make($formData, [
-            'alias' => 'required|email|max:255',
+            'alias' => 'required|max:255',
             'forwards_to.*' => 'required|email',
-        ])->validate();
+        ])->sometimes('alias', 'email', function($input){
+            return !str_starts_with($input->alias, '@');
+        })->validate();
 
         try {
             $this->mailService->addAlias(
