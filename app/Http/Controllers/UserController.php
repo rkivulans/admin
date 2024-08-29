@@ -103,7 +103,7 @@ class UserController extends Controller
 
         $user->update([
             'name' => $validated['name'],
-            'domains' => $validated['domains'],
+            'domains' => $validated['domains'] ?? [],
         ]);
 
         return redirect()->route('users.index')
