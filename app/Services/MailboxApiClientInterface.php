@@ -25,4 +25,6 @@ interface MailboxApiClientInterface
     public function addMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN);
 
     public function removeMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN);
+
+    public function checkAccess(string $email, array $allowedDomains = []): bool;
 }

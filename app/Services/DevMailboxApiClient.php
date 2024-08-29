@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class DevMailboxApiClient implements MailboxApiClientInterface
 {
@@ -73,5 +74,20 @@ class DevMailboxApiClient implements MailboxApiClientInterface
     public function removeMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
     {
         return true;
+    }
+
+    public function checkAccess(string $email, array $allowedDomains = []): bool
+    {
+        if (in_array('*', $allowedDomains)) { // for superadmin
+            return true;
+        }
+
+        foreach ($allowedDomains as $allowedDomain) {
+            if (Str::endsWith($email, "@$allowedDomain")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

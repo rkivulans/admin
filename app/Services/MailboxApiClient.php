@@ -27,7 +27,7 @@ class MailboxApiClient implements MailboxApiClientInterface
         return Http::withBasicAuth($this->user, $this->password)
             ->withUrlParameters([
                 'endpoint' => $this->server,
-            ]);
+            ])->throw();
 
     }
 
@@ -61,7 +61,7 @@ class MailboxApiClient implements MailboxApiClientInterface
 
     public function addMailUser(string $email, string $password, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::USER)
     {
-        $response = $this->httpCall()
+        $this->httpCall()
             ->asForm()    ///->dd()
             ->post('{+endpoint}/mail/users/add', [
                 'email' => $email,
@@ -69,11 +69,8 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'privileges' => $privilege->value,
             ]);
 
-        return $response; /// need to delete this line after
     }
 
-    /// on update update_if_exists = 1, by default = 0
-    /// on update permitted_users = string (with emails), by default null
     public function addOrUpdateMailAlias(string $address, string $forwardsTo, ?string $permittedSenders = null, int $updateIfExists = 0)
     {
         $response = $this->httpCall()
@@ -83,9 +80,9 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'address' => $address,
                 'forwards_to' => $forwardsTo,
                 'permitted_senders' => $permittedSenders,
-            ])->body();
+            ]);
 
-        return $response; /// delete
+        return $response;
     }
 
     public function setMailUserPassword(string $email, string $password)
@@ -97,7 +94,7 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'password' => $password,
             ]);
 
-        return $response; // delete
+        return $response;
     }
 
     public function removeMailUser(string $email)
@@ -108,7 +105,7 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'email' => $email,
             ]);
 
-        return $response; // delete
+        return $response;
     }
 
     public function removeMailAlias(string $address)
@@ -119,10 +116,9 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'address' => $address,
             ]);
 
-        return $response; // delete
+        return $response;
     }
 
-    // by default add privilege = admin;
     public function addMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
     {
         $response = $this->httpCall()
@@ -132,10 +128,9 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'privilege' => $privilege->value,
             ]);
 
-        return $response; // delete
+        return $response;
     }
 
-    // by default remove privilege = admin;
     public function removeMailUserPrivilege(string $email, MailUserPrivilegeEnum $privilege = MailUserPrivilegeEnum::ADMIN)
     {
         $response = $this->httpCall()
@@ -145,6 +140,21 @@ class MailboxApiClient implements MailboxApiClientInterface
                 'privilege' => $privilege->value,
             ]);
 
-        return $response; // delete
+        return $response;
+    }
+
+    public function checkAccess(string $email, array $allowedDomains = []): bool
+    {
+        if (in_array('*', $allowedDomains)) {
+            return true;
+        }
+
+        foreach ($allowedDomains as $allowedDomain) {
+            if (Str::endsWith($email, "@$allowedDomain")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

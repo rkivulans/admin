@@ -45,16 +45,17 @@ class AliasController extends Controller
             return ! str_starts_with($input->alias, '@');
         })->validate();
 
-        try {
-            $this->mailService->addAlias(
-                $validated['alias'],
-                $validated['forwards_to'],
-                $request->user()->domains,
-            );
-        } catch (\ErrorException $error) {
+        if (! $this->mailService->checkAccess($validated['alias'], $request->user()->domains)) {
             return redirect()->back()
-                ->with('error', $error->getMessage());
+                ->with('error', __("You have no permision to this domain!"))
+                ->withInput();
         }
+
+        $this->mailService->addAlias(
+            $validated['alias'],
+            $validated['forwards_to'],
+            $request->user()->domains,
+        );
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias created successfully!', ['alias' => $validated['alias']]))
