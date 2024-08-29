@@ -69,7 +69,7 @@ class MailService
     {
         abort_unless($this->checkAccess($email, $allowedDomains), 403); // Unauthorized
 
-         $this->mailaApi->addMailUser(
+        $this->mailaApi->addMailUser(
             $email, $password, $role
         );
 

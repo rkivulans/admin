@@ -40,29 +40,42 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($users as $user)
-                                    <tr
-                                        @if ($user->email == session('lastId')) class="bg-gray-50" @endif
-                                    >
+                                @foreach ($users->groupBy(function ($user, int $key) {
+                                        return explode("@", $user->email, 2)[1];
+                                    })
+                                    as $groupName => $groupedUsers)
+                                    <tr class="bg-gray-200">
                                         <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                                            class="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                                            colspan="2"
                                         >
-                                            {{ $user->email }}
-                                        </td>
-                                        <td
-                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                                        >
-                                            <a
-                                                href="{{ route("emails.edit", ["email" => $user->email]) }}"
-                                                class="text-indigo-600 hover:text-indigo-900"
-                                            >
-                                                {{ __("Edit") }}
-                                                <span class="sr-only">
-                                                    , {{ $user->email }}
-                                                </span>
-                                            </a>
+                                            {{ $groupName }}
                                         </td>
                                     </tr>
+                                    @foreach ($groupedUsers as $user)
+                                        <tr
+                                            @if ($user->email == session('lastId')) class="bg-gray-50" @endif
+                                        >
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                                            >
+                                                {{ $user->email }}
+                                            </td>
+                                            <td
+                                                class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                                            >
+                                                <a
+                                                    href="{{ route("emails.edit", ["email" => $user->email]) }}"
+                                                    class="text-indigo-600 hover:text-indigo-900"
+                                                >
+                                                    {{ __("Edit") }}
+                                                    <span class="sr-only">
+                                                        , {{ $user->email }}
+                                                    </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
