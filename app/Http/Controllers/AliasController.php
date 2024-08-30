@@ -22,7 +22,7 @@ class AliasController extends Controller
     {
         $mailService = $this->mailService;
 
-        $aliases = Cache::remember('aliases', 600, function () use ($request, $mailService) {
+        $aliases = Cache::remember("aliases:{$request->user()->id}", 600, function () use ($request, $mailService) {
             return $mailService
                 ->getAliases($request->user()->domains)
                 ->sortBy('address');
@@ -63,8 +63,7 @@ class AliasController extends Controller
             $request->user()->domains,
         );
 
-        Cache::forget('aliases');
-        Cache::forget('allDomains');
+        Cache::flush();
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias created successfully!', ['alias' => $validated['alias']]))
@@ -107,7 +106,7 @@ class AliasController extends Controller
                 ->with('error', $error->getMessage());
         }
 
-        Cache::forget('aliases');
+        Cache::flush();
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
