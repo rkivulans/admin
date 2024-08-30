@@ -64,15 +64,20 @@
                                             <td
                                                 class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
                                             >
-                                                <a
-                                                    href="{{ route("emails.edit", ["email" => $user->email]) }}"
-                                                    class="text-indigo-600 hover:text-indigo-900"
-                                                >
-                                                    {{ __("Edit") }}
-                                                    <span class="sr-only">
-                                                        , {{ $user->email }}
-                                                    </span>
-                                                </a>
+                                                @if ($user->email === Auth::user()->email)
+                                                    {{ __("(You)") }}
+                                                @else
+                                                    <a
+                                                        href="{{ route("emails.edit", ["email" => $user->email]) }}"
+                                                        class="text-indigo-600 hover:text-indigo-900"
+                                                    >
+                                                        {{ __("Edit") }}
+                                                        <span class="sr-only">
+                                                            ,
+                                                            {{ $user->email }}
+                                                        </span>
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

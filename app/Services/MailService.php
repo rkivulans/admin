@@ -29,13 +29,14 @@ class MailService
 
     public function getDomains(array $domains = []): Collection
     {
+        dump('Getting domains from API');
+
         return $this->mailaApi->getAllDomains()
             ->filter(fn ($domain) => $this->domainFilter($domain, $domains));
     }
 
     public function getMailbox(string $email, array $allowedDomains = [])
     {
-
         return $this->getUsers($allowedDomains)
             ->whereIn('email', [$email])
             ->first(); ///// atgriez json vai null

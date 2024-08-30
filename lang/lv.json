@@ -79,6 +79,7 @@
     "Email doesn't exist in API!": "Epasts API nēeksistē",
     "Atleast one of domains doesn't exist in API": "Viens no domēniem API nēeksistē",
     "You have no permision to this domain!": "Jums nav pieejas šim domēnam!",
+    "(You)": "(Jūs)",
 
     "Zipper": "Rāvējslēdzis"
 }
