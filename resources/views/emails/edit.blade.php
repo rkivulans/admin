@@ -15,55 +15,51 @@
                     {{ __("Reset Password for :email", ["email" => $email]) }}
                 </h2>
 
-                <p class="mt-1 text-sm text-gray-600">
-                    {{ __("Ensure the account is using a long, random password to stay secure.") }}
-                </p>
+                @if (Auth::user()->email === $email)
+                    <p class="mt-1 text-sm text-red-600">
+                        {{ __("You cannot change your own password here. Use your profile settings instead.") }}
+                    </p>
+                @else
+                    <p class="mt-1 text-sm text-gray-600">
+                        {{ __("Ensure the account is using a long, random password to stay secure.") }}
+                    </p>
+                @endif
             </header>
 
-            <form
-                method="POST"
-                action="{{ route("emails.update", ["email" => $email]) }}"
-                class="mt-6 space-y-6"
-            >
-                @csrf
-                @method("put")
+            @if (Auth::user()->email !== $email)
+                <form
+                    method="POST"
+                    action="{{ route("emails.update", ["email" => $email]) }}"
+                    class="mt-6 space-y-6"
+                >
+                    @csrf
+                    @method("put")
 
-                <div>
-                    <x-input-label
-                        for="password"
-                        :value="__('New Password')"
-                    />
-                    <x-text-input
-                        id="password"
-                        name="password"
-                        type="password"
-                        class="mt-1 block w-full"
-                        autocomplete="new-password"
-                    />
-                    <x-input-error
-                        :messages="$errors->get('password')"
-                        class="mt-2"
-                    />
-                </div>
+                    <div>
+                        <x-input-label
+                            for="password"
+                            :value="__('New Password')"
+                        />
+                        <x-text-input
+                            id="password"
+                            name="password"
+                            type="password"
+                            class="mt-1 block w-full"
+                            autocomplete="new-password"
+                        />
+                        <x-input-error
+                            :messages="$errors->get('password')"
+                            class="mt-2"
+                        />
+                    </div>
 
-                <div class="flex items-center gap-4">
-                    <x-primary-button>
-                        {{ __("Reset Password") }}
-                    </x-primary-button>
-
-                    @if (session("status") === "password-updated")
-                        <p
-                            x-data="{ show: true }"
-                            x-show="show"
-                            x-transition
-                            x-init="setTimeout(() => (show = false), 2000)"
-                            class="text-sm text-gray-600"
-                        >
-                            {{ __("Saved") }}
-                        </p>
-                    @endif
-                </div>
-            </form>
+                    <div class="flex items-center gap-4">
+                        <x-primary-button>
+                            {{ __("Reset Password") }}
+                        </x-primary-button>
+                    </div>
+                </form>
+            @endif
         </div>
     </div>
 </x-app-layout>

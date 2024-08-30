@@ -6,6 +6,7 @@ use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class EmailController extends Controller
 {
@@ -19,21 +20,21 @@ class EmailController extends Controller
 
     public function index(Request $request)
     {
-        $users = $this->mailService
-            ->getUsers($request->user()->domains)
-            ->sortBy('email');
+        $mailService = $this->mailService;
 
-        return view('emails.index', [
-            'users' => $users,
-        ]);
+        $users = Cache::remember('emails', 600, function () use ($request, $mailService) {
+            return $mailService
+                ->getUsers($request->user()->domains)
+                ->sortBy('email');
+        });
+
+        return view('emails.index', compact('users'));
     }
 
     public function create()
     {
 
-        return view('emails.create', [
-
-        ]);
+        return view('emails.create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -55,22 +56,24 @@ class EmailController extends Controller
                 ->with('error', $error->getMessage());
         }
 
+        Cache::forget('emails');
+        Cache::forget('allDomains');
+
         return redirect()->route('emails.index')
             ->with('success', __('Email :email created successfully!', ['email' => $validated['email']]))
             ->with('lastId', $validated['email']);
     }
 
-    public function edit(Request $request, $user)
+    public function edit(Request $request, $email)
     {
 
-        // Atgriež skatu 'emails.edit
-        return view('emails.edit', [
-            'email' => $user,
-        ]);
+        return view('emails.edit', compact('email'));
     }
 
     public function update(Request $request, $user): RedirectResponse
     {
+        abort_if($user == $request->user()->email, 403);
+
         // Validē paroli (obligāta, vismaz 8 rakstzīmes)
         $validated = $request->validate([
             'password' => 'required|string|min:8',
@@ -84,6 +87,7 @@ class EmailController extends Controller
             return redirect()->back()
                 ->with('error', $error->getMessage());
         }
+        Cache::forget('emails');
 
         // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
         return redirect()->route('emails.index')

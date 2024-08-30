@@ -6,6 +6,7 @@ use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class AliasController extends Controller
@@ -19,16 +20,21 @@ class AliasController extends Controller
 
     public function index(Request $request)
     {
+        $mailService = $this->mailService;
 
-        return view('aliases.index', [
-            'aliases' => $this->mailService->getAliases($request->user()->domains)->sortBy('address'),
-        ]);
+        $aliases = Cache::remember('aliases', 600, function () use ($request, $mailService) {
+            return $mailService
+                ->getAliases($request->user()->domains)
+                ->sortBy('address');
+        });
+
+        return view('aliases.index', compact('aliases'));
     }
 
     public function create()
     {
 
-        return view('aliases.create', []);
+        return view('aliases.create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -57,6 +63,9 @@ class AliasController extends Controller
             $request->user()->domains,
         );
 
+        Cache::forget('aliases');
+        Cache::forget('allDomains');
+
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias created successfully!', ['alias' => $validated['alias']]))
             ->with('lastId', $validated['alias']);
@@ -67,15 +76,13 @@ class AliasController extends Controller
         /// ceru ka es pareizi domaju
         //// seit iespejams ari vajadzeja try un catch, bet pagaidam atstaju
         $aliasData = $this->mailService->getAlias($alias, $request->user()->domains);
+        $forwards_to = $aliasData->forwards_to;
 
         // dd($aliasData);
 
         abort_unless($aliasData, 404);
 
-        return view('aliases.edit', [
-            'address' => $alias,
-            'forwards_to' => $aliasData->forwards_to,
-        ]);
+        return view('aliases.edit', compact('alias', 'forwards_to'));
     }
 
     public function update(Request $request, $alias): RedirectResponse
@@ -99,6 +106,8 @@ class AliasController extends Controller
             return redirect()->back()
                 ->with('error', $error->getMessage());
         }
+
+        Cache::forget('aliases');
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
