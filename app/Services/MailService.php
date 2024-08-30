@@ -108,6 +108,22 @@ class MailService
         );
     }
 
+    public function passwordIsValid(string $email, string $password)
+    {
+
+        $response = $this->mailaApi->getLoginApiKey($email, $password);
+
+        if ($response->status === 'ok') {
+            return true;
+        }
+        if ($response->status === 'invalid') {
+            return false;
+        }
+
+        abort(500, 'API server error!');
+
+    }
+
     protected function domainFilter($data, $domains)
     {
         return in_array('*', $domains) ? $data : in_array($data, $domains);

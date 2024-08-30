@@ -76,6 +76,12 @@ class DevMailboxApiClient implements MailboxApiClientInterface
         return true;
     }
 
+    //// work in progress...
+    public function getLoginApiKey(string $email, string $password)
+    {
+        return true;
+    }
+
     public function checkAccess(string $email, array $allowedDomains = []): bool
     {
         if (in_array('*', $allowedDomains)) { // for superadmin

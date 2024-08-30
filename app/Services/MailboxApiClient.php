@@ -143,6 +143,16 @@ class MailboxApiClient implements MailboxApiClientInterface
         return $response;
     }
 
+    public function getLoginApiKey(string $email, string $password)
+    {
+
+        $response = $this->httpCall()
+            ->withBasicAuth($email, $password)
+            ->post('{+endpoint}/login');
+
+        return $response->object();
+    }
+
     public function checkAccess(string $email, array $allowedDomains = []): bool
     {
         if (in_array('*', $allowedDomains)) {
