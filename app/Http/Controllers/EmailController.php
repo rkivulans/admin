@@ -22,7 +22,7 @@ class EmailController extends Controller
     {
         $mailService = $this->mailService;
 
-        $users = Cache::remember('emails', 600, function () use ($request, $mailService) {
+        $users = Cache::remember("emails:{$request->user()->id}", 600, function () use ($request, $mailService) {
             return $mailService
                 ->getUsers($request->user()->domains)
                 ->sortBy('email');
@@ -56,8 +56,7 @@ class EmailController extends Controller
                 ->with('error', $error->getMessage());
         }
 
-        Cache::forget('emails');
-        Cache::forget('allDomains');
+        Cache::flush();
 
         return redirect()->route('emails.index')
             ->with('success', __('Email :email created successfully!', ['email' => $validated['email']]))
@@ -87,7 +86,7 @@ class EmailController extends Controller
             return redirect()->back()
                 ->with('error', $error->getMessage());
         }
-        Cache::forget('emails');
+        Cache::flush();
 
         // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
         return redirect()->route('emails.index')

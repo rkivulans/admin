@@ -29,8 +29,6 @@ class MailService
 
     public function getDomains(array $domains = []): Collection
     {
-        dump('Getting domains from API');
-
         return $this->mailaApi->getAllDomains()
             ->filter(fn ($domain) => $this->domainFilter($domain, $domains));
     }
