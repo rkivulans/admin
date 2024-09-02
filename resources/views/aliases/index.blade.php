@@ -46,40 +46,53 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach ($aliases as $alias)
-                                    <tr
-                                        @if ($alias->address_display == session('lastId')) class="bg-gray-50" @endif
-                                    >
+                                @foreach ($aliases->groupBy(function ($alias, int $key) {
+                                        return explode("@", $alias->address_display, 2)[1];
+                                    }) 
+                                    as $groupName => $groupedAliases)
+                                    <tr class="bg-gray-200">
                                         <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                                            class="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                                            colspan="3"
                                         >
-                                            {{ $alias->address_display }}
-                                        </td>
-                                        <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500"
-                                        >
-                                            @foreach ($alias->forwards_to as $forward)
-                                                {{ $forward }}
-                                                <br />
-                                            @endforeach
-                                        </td>
-                                        <td
-                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                                        >
-                                            @if (! $alias->auto)
-                                                <a
-                                                    href="{{ route("aliases.edit", ["alias" => $alias->address]) }}"
-                                                    class="text-indigo-600 hover:text-indigo-900"
-                                                >
-                                                    {{ __("Edit") }}
-                                                    <span class="sr-only">
-                                                        ,
-                                                        {{ $alias->address_display }}
-                                                    </span>
-                                                </a>
-                                            @endif
+                                            {{ $groupName }}
                                         </td>
                                     </tr>
+                                    @foreach ($groupedAliases as $alias)
+                                        <tr
+                                            @if ($alias->address_display == session('lastId')) class="bg-gray-50" @endif
+                                        >
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
+                                            >
+                                                {{ $alias->address_display }}
+                                            </td>
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500"
+                                            >
+                                                @foreach ($alias->forwards_to as $forward)
+                                                    {{ $forward }}
+                                                    <br />
+                                                @endforeach
+                                            </td>
+                                            <td
+                                                class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+                                            >
+                                                @if (! $alias->auto)
+                                                    <a
+                                                        href="{{ route("aliases.edit", ["alias" => $alias->address]) }}"
+                                                        class="text-indigo-600 hover:text-indigo-900"
+                                                    >
+                                                        {{ __("Edit") }}
+                                                        <span class="sr-only">
+                                                            ,
+                                                            {{ $alias->address_display }}
+                                                        </span>
+                                                    </a>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
