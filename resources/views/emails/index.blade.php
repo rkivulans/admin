@@ -14,76 +14,42 @@
 
         <div class="mt-8 flow-root">
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div
-                    class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
-                >
-                    <div
-                        class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"
-                    >
-                        <table class="min-w-full divide-y divide-gray-300">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        {{ __("Email") }}
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                                    >
-                                        <span class="sr-only">
-                                            {{ __("Edit") }}
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($users->groupBy(function ($user, int $key) {
-                                        return explode("@", $user->email, 2)[1];
-                                    })
-                                    as $groupName => $groupedUsers)
-                                    <tr class="bg-gray-200">
-                                        <td
-                                            class="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
-                                            colspan="2"
-                                        >
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                        <ul role="list" class="divide-y divide-gray-100">
+                            @foreach ($users->groupBy(function ($user, int $key) {
+                                    return explode("@", $user->email, 2)[1];
+                                }) 
+                                as $groupName => $groupedUsers)
+                                <li class="flex gap-x-4 py-5 bg-gray-200 px-4">
+                                    <div class="flex-auto">
+                                        <p class="whitespace-nowrap py-2 text-sm text-gray-900 font-semibold">
                                             {{ $groupName }}
-                                        </td>
-                                    </tr>
-                                    @foreach ($groupedUsers as $user)
-                                        <tr
-                                            @if ($user->email == session('lastId')) class="bg-gray-50" @endif
-                                        >
-                                            <td
-                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
-                                            >
-                                                {{ $user->email }}
-                                            </td>
-                                            <td
-                                                class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                                            >
+                                        </p>
+                                    </div>
+                                </li>
+                                @foreach ($groupedUsers as $user)
+                                    <li class="flex gap-x-4 py-5 px-4 @if ($user->email == session('lastId')) bg-gray-50 @endif">
+                                        <div class="flex-auto">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <p class="text-sm text-gray-900">
+                                                    {{ $user->email }}
+                                                </p>
                                                 @if ($user->email === Auth::user()->email)
-                                                    {{ __("(You)") }}
+                                                    <span class="text-sm text-gray-500">{{ __("(You)") }}</span>
                                                 @else
-                                                    <a
-                                                        href="{{ route("emails.edit", ["email" => $user->email]) }}"
-                                                        class="text-indigo-600 hover:text-indigo-900"
-                                                    >
+                                                    <a href="{{ route("emails.edit", ["email" => $user->email]) }}"
+                                                       class="text-indigo-600 hover:text-indigo-900 text-sm font-medium pr-2">
                                                         {{ __("Edit") }}
-                                                        <span class="sr-only">
-                                                            ,
-                                                            {{ $user->email }}
-                                                        </span>
+                                                        <span class="sr-only">, {{ $user->email }}</span>
                                                     </a>
                                                 @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                            </div>
+                                        </div>
+                                    </li>
                                 @endforeach
-                            </tbody>
-                        </table>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
