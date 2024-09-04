@@ -12,47 +12,45 @@
             </x-primary-button>
         </div>
 
-        <div class="mt-8 flow-root">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                        <ul role="list" class="divide-y divide-gray-100">
-                            @foreach ($users->groupBy(function ($user, int $key) {
-                                    return explode("@", $user->email, 2)[1];
-                                }) 
-                                as $groupName => $groupedUsers)
-                                <li class="flex gap-x-4 py-5 bg-gray-200 px-4">
-                                    <div class="flex-auto">
-                                        <p class="whitespace-nowrap py-2 text-sm text-gray-900 font-semibold">
-                                            {{ $groupName }}
-                                        </p>
-                                    </div>
-                                </li>
-                                @foreach ($groupedUsers as $user)
-                                    <li class="flex gap-x-4 py-5 px-4 @if ($user->email == session('lastId')) bg-gray-50 @endif">
-                                        <div class="flex-auto">
-                                            <div class="flex justify-between items-center mb-2">
-                                                <p class="text-sm text-gray-900">
-                                                    {{ $user->email }}
-                                                </p>
-                                                @if ($user->email === Auth::user()->email)
-                                                    <span class="text-sm text-gray-500">{{ __("(You)") }}</span>
-                                                @else
-                                                    <a href="{{ route("emails.edit", ["email" => $user->email]) }}"
-                                                       class="text-indigo-600 hover:text-indigo-900 text-sm font-medium pr-2">
-                                                        {{ __("Edit") }}
-                                                        <span class="sr-only">, {{ $user->email }}</span>
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </li>
-                                @endforeach
-                            @endforeach
-                        </ul>
+        <div class="mt-8 w-full rounded-lg ring-1 ring-slate-900/10 bg-white">
+            @foreach ($users->groupBy(function ($user, int $key) {
+                    return explode("@", $user->email, 2)[1];
+                })
+                as $groupName => $groupedUsers)
+                <div class="relative group">
+                    <div
+                        class="sticky top-0 z-10 border-y border-b-gray-200 border-t-gray-100 bg-gray-50 px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 group-first:rounded-t-lg"
+                    >
+                        <h3>{{ $groupName }}</h3>
                     </div>
+                    <ul role="list" class="divide-y divide-gray-100">
+                        @foreach ($groupedUsers as $user)
+                            <li
+                                class="flex items-center justify-between gap-x-5 py-2 px-3 @if ($user->email == session('lastId')) bg-gray-50 @endif"
+                            >
+                                <div class="min-w-0 flex-auto">
+                                    <p class="text-sm leading-6 text-gray-900">
+                                        {{ $user->email }}
+                                    </p>
+                                </div>
+
+                                @if ($user->email === Auth::user()->email)
+                                    <span class="text-sm text-gray-500">
+                                        {{ __("(You)") }}
+                                    </span>
+                                @else
+                                    <a
+                                        href="{{ route("emails.edit", ["email" => $user->email]) }}"
+                                        class="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                    >
+                                        {{ __("Edit") }}
+                                    </a>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </x-app-layout>
