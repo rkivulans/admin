@@ -44,18 +44,19 @@ class EmailController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        Cache::flush();
-
-        try {
-            $this->mailService->addUser(
-                $validated['email'],
-                $validated['password'],
-                $request->user()->domains,
-            );
-        } catch (\ErrorException $error) {
+        if (! $this->mailService->checkAccess($validated['email'], $request->user()->domains)) {
             return redirect()->back()
-                ->with('error', $error->getMessage());
+                ->with('error', __('You have no permision to this domain!'))
+                ->withInput();
         }
+
+        $this->mailService->addUser(
+            $validated['email'],
+            $validated['password'],
+            $request->user()->domains,
+        );
+
+        Cache::flush();
 
         return redirect()->route('emails.index')
             ->with('success', __('Email :email created successfully!', ['email' => $validated['email']]))
@@ -76,17 +77,17 @@ class EmailController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        Cache::flush();
-
-        try {
-            $this->mailService->setPassword(
-                $user, $validated['password'], $request->user()->domains
-            );
-        } catch (\ErrorException $error) {
+        if (! $this->mailService->checkAccess($user, $request->user()->domains)) {
             return redirect()->back()
-                ->with('error', $error->getMessage());
+                ->with('error', __('You have no permision to this domain!'))
+                ->withInput();
         }
 
+        $this->mailService->setPassword($user, $validated['password'], $request->user()->domains);
+
+        Cache::flush();
+
+        // Pāradresē uz 'emails.index' ar veiksmes ziņojumu
         return redirect()->route('emails.index')
             ->with('success', __('User :user password reset successfully!', ['user' => $user]))
             ->with('lastId', $user);
