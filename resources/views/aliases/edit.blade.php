@@ -5,7 +5,7 @@
                 {{ __("Aliases") }}
             </a>
             <span class="text-gray-400">/</span>
-            {{ __(":alias update", ["alias" => $address]) }}
+            {{ __(":alias update", ["alias" => $alias]) }}
         </h2>
     </x-slot>
     <div class="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
@@ -22,7 +22,7 @@
 
             <form
                 method="POST"
-                action="{{ route("aliases.update", ["alias" => $address]) }}"
+                action="{{ route("aliases.update", ["alias" => $alias]) }}"
                 class="mt-6 space-y-6"
             >
                 @csrf
@@ -33,7 +33,7 @@
                     <x-text-input
                         id="alias"
                         type="text"
-                        value="{{ $address }}"
+                        value="{{ $alias }}"
                         class="mt-1 block w-full bg-gray-200"
                         readonly
                     />

@@ -62,7 +62,7 @@
                     <fieldset>
                         <legend class="sr-only">__('Domains')</legend>
                         <div class="space-y-2">
-                            @foreach ($domains as $domain)
+                            @foreach ($domains->sort() as $domain)
                                 <div class="relative flex items-start">
                                     <div class="flex h-6 items-center">
                                         <input

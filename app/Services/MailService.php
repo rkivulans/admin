@@ -35,7 +35,6 @@ class MailService
 
     public function getMailbox(string $email, array $allowedDomains = [])
     {
-
         return $this->getUsers($allowedDomains)
             ->whereIn('email', [$email])
             ->first(); ///// atgriez json vai null
@@ -106,6 +105,22 @@ class MailService
             $permittedSenders,
             updateIfExists: 1  ///// Unknown named parameter $updateIfExists
         );
+    }
+
+    public function passwordIsValid(string $email, string $password)
+    {
+
+        $response = $this->mailaApi->getLoginApiKey($email, $password);
+
+        if ($response->status === 'ok') {
+            return true;
+        }
+        if ($response->status === 'invalid') {
+            return false;
+        }
+
+        abort(500, 'API server error!');
+
     }
 
     protected function domainFilter($data, $domains)

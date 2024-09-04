@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\MailboxApiClientInterface;
 use App\Services\MailService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class UserController extends Controller
@@ -21,15 +22,21 @@ class UserController extends Controller
     public function index(Request $request)
     {
         abort_unless($request->user()->isSuperAdmin(), 403);
+        $users = User::all();
 
-        return view('users.index', ['users' => User::all()]);
+        return view('users.index', compact('users'));
     }
 
     public function create(Request $request)
     {
         abort_unless($request->user()->isSuperAdmin(), 403);
 
-        return view('users.create', ['domains' => $this->mailService->getDomains(['*'])]);
+        $mailService = $this->mailService;
+        $domains = Cache::remember('allDomains', 10, function () use ($mailService) {
+            return $mailService->getDomains(['*']);
+        });
+
+        return view('users.create', compact('domains'));
     }
 
     public function store(Request $request)
@@ -49,7 +56,10 @@ class UserController extends Controller
         }
 
         if (isset($validated['domains'])) {
-            $apiDomains = $this->mailService->getDomains(['*']);
+            $mailService = $this->mailService;
+            $apiDomains = Cache::remember('allDomains', 10, function () use ($mailService) {
+                return $mailService->getDomains(['*']);
+            });
             foreach ($validated['domains'] as $domain) {
                 if ($domain === '*') {
                     continue;
@@ -75,7 +85,12 @@ class UserController extends Controller
     {
         abort_unless($request->user()->isSuperAdmin(), 403);
 
-        return view('users.edit', ['user' => $user, 'domains' => $this->mailService->getDomains(['*'])]);
+        $mailService = $this->mailService;
+        $domains = Cache::remember('allDomains', 10, function () use ($mailService) {
+            return $mailService->getDomains(['*']);
+        });
+
+        return view('users.edit', compact('user', 'domains'));
     }
 
     public function update(Request $request, User $user)
@@ -89,7 +104,10 @@ class UserController extends Controller
         ]);
 
         if (isset($validated['domains'])) {
-            $apiDomains = $this->mailService->getDomains(['*']);
+            $mailService = $this->mailService;
+            $apiDomains = Cache::remember('allDomains', 10, function () use ($mailService) {
+                return $mailService->getDomains(['*']);
+            });
             foreach ($validated['domains'] as $domain) {
                 if ($domain === '*') {
                     continue;
@@ -105,6 +123,8 @@ class UserController extends Controller
             'name' => $validated['name'],
             'domains' => $validated['domains'] ?? [],
         ]);
+
+        Cache::flush();
 
         return redirect()->route('users.index')
             ->with('success', __('User :user updated successfully!', ['user' => $user->email]))
