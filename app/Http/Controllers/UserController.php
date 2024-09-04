@@ -32,7 +32,7 @@ class UserController extends Controller
         abort_unless($request->user()->isSuperAdmin(), 403);
 
         $mailService = $this->mailService;
-        $domains = Cache::remember('allDomains', 600, function () use ($mailService) {
+        $domains = Cache::remember('allDomains', 10, function () use ($mailService) {
             return $mailService->getDomains(['*']);
         });
 
@@ -57,7 +57,7 @@ class UserController extends Controller
 
         if (isset($validated['domains'])) {
             $mailService = $this->mailService;
-            $apiDomains = Cache::remember('allDomains', 600, function () use ($mailService) {
+            $apiDomains = Cache::remember('allDomains', 10, function () use ($mailService) {
                 return $mailService->getDomains(['*']);
             });
             foreach ($validated['domains'] as $domain) {
@@ -86,7 +86,7 @@ class UserController extends Controller
         abort_unless($request->user()->isSuperAdmin(), 403);
 
         $mailService = $this->mailService;
-        $domains = Cache::remember('allDomains', 600, function () use ($mailService) {
+        $domains = Cache::remember('allDomains', 10, function () use ($mailService) {
             return $mailService->getDomains(['*']);
         });
 
@@ -105,7 +105,7 @@ class UserController extends Controller
 
         if (isset($validated['domains'])) {
             $mailService = $this->mailService;
-            $apiDomains = Cache::remember('allDomains', 600, function () use ($mailService) {
+            $apiDomains = Cache::remember('allDomains', 10, function () use ($mailService) {
                 return $mailService->getDomains(['*']);
             });
             foreach ($validated['domains'] as $domain) {
@@ -123,6 +123,8 @@ class UserController extends Controller
             'name' => $validated['name'],
             'domains' => $validated['domains'] ?? [],
         ]);
+
+        Cache::flush();
 
         return redirect()->route('users.index')
             ->with('success', __('User :user updated successfully!', ['user' => $user->email]))

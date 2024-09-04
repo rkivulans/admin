@@ -22,7 +22,7 @@ class AliasController extends Controller
     {
         $mailService = $this->mailService;
 
-        $aliases = Cache::remember("aliases:{$request->user()->id}", 600, function () use ($request, $mailService) {
+        $aliases = Cache::remember("aliases:{$request->user()->id}", 10, function () use ($request, $mailService) {
             return $mailService
                 ->getAliases($request->user()->domains)
                 ->sortBy('address');
@@ -51,6 +51,8 @@ class AliasController extends Controller
             return ! str_starts_with($input->alias, '@');
         })->validate();
 
+        Cache::flush();
+
         if (! $this->mailService->checkAccess($validated['alias'], $request->user()->domains)) {
             return redirect()->back()
                 ->with('error', __('You have no permision to this domain!'))
@@ -62,8 +64,6 @@ class AliasController extends Controller
             $validated['forwards_to'],
             $request->user()->domains,
         );
-
-        Cache::flush();
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias created successfully!', ['alias' => $validated['alias']]))
@@ -95,6 +95,8 @@ class AliasController extends Controller
                 'forwards_to.*' => 'required|email',
             ])->validate();
 
+        Cache::flush();
+
         try {
             $this->mailService->updateAlias(
                 $alias,
@@ -105,8 +107,6 @@ class AliasController extends Controller
             return redirect()->back()
                 ->with('error', $error->getMessage());
         }
-
-        Cache::flush();
 
         return redirect()->route('aliases.index')
             ->with('success', __('Alias :alias updated successfully!', ['alias' => $alias]))
