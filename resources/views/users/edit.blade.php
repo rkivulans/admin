@@ -29,6 +29,17 @@
                 @method("PUT")
 
                 <div>
+                    <x-input-label for="email" :value="__('Email')" />
+                    <x-text-input
+                        id="email"
+                        type="text"
+                        value="{{ $user->email }}"
+                        class="mt-1 block w-full bg-gray-200"
+                        readonly
+                    />
+                </div>
+
+                <div>
                     <x-input-label for="name" :value="__('Name')" />
                     <x-text-input
                         id="name"
