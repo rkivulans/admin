@@ -12,78 +12,34 @@
             </x-primary-button>
         </div>
 
-        <div class="mt-8 flow-root">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div
-                    class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
-                >
-                    <div
-                        class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg"
+        <div class="mt-8 w-full rounded-lg ring-1 ring-slate-900/10 bg-white">
+            <ul role="list" class="divide-y divide-gray-100">
+                @foreach ($users as $user)
+                    <li
+                        class="flex items-center justify-between gap-x-5 py-2 px-3 @if ($user->email == session('lastId')) bg-gray-50 @endif"
                     >
-                        <table class="min-w-full divide-y divide-gray-300">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        {{ __("User") }}
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                    >
-                                        {{ __("Domains") }}
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        class="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                                    >
-                                        <span class="sr-only">
-                                            {{ __("Edit") }}
-                                        </span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
-                                @foreach ($users as $user)
-                                    <tr
-                                        @if ($user->email == session('lastId')) class="bg-gray-50" @endif
-                                    >
-                                        <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
-                                        >
-                                            {{ $user->email }}
-                                        </td>
-
-                                        <td
-                                            class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-900 sm:pl-6"
-                                        >
-                                            @foreach ($user->domains as $domain)
-                                                {{ $domain }}
-                                                <br />
-                                            @endforeach
-                                        </td>
-                                        <td
-                                            class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
-                                        >
-                                            <a
-                                                href="{{ route("users.edit", ["user" => $user]) }}"
-                                                class="text-indigo-600 hover:text-indigo-900"
-                                            >
-                                                {{ __("Edit") }}
-                                                <span class="sr-only">
-                                                    , {{ $user->email }}
-                                                </span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+                        <div class="min-w-0 flex-auto">
+                            <p
+                                class="text-sm font-semibold leading-6 text-gray-900"
+                            >
+                                {{ $user->name }}
+                                <span class="text-gray-500 font-normal">
+                                    {{ $user->email }}
+                                </span>
+                            </p>
+                            <p class="mt-1 line-clamp-2 text-xs text-gray-500">
+                                {{ Arr::join($user->domains, ", ") }}
+                            </p>
+                        </div>
+                        <a
+                            href="{{ route("users.edit", ["user" => $user]) }}"
+                            class="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        >
+                            {{ __("Edit") }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </div>
     </div>
 </x-app-layout>
