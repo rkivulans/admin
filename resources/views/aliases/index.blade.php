@@ -26,7 +26,7 @@
                     <ul role="list" class="divide-y divide-gray-100">
                         @foreach ($groupedAliases as $alias)
                             <li
-                                class="flex items-center justify-between gap-x-5 py-2 px-3 @if ($alias->address_display == session('lastId')) bg-gray-50 @endif"
+                                class="flex items-center justify-between gap-x-5 py-4 px-3 @if ($alias->address_display == session('lastId')) bg-gray-50 @endif"
                             >
                                 <div class="min-w-0 flex-auto">
                                     <p

@@ -26,7 +26,7 @@
                     <ul role="list" class="divide-y divide-gray-100">
                         @foreach ($groupedUsers as $user)
                             <li
-                                class="flex items-center justify-between gap-x-5 py-2 px-3 @if ($user->email == session('lastId')) bg-gray-50 @endif"
+                                class="flex items-center justify-between gap-x-5 py-4 px-3 @if ($user->email == session('lastId')) bg-gray-50 @endif"
                             >
                                 <div class="min-w-0 flex-auto">
                                     <p class="text-sm leading-6 text-gray-900">
