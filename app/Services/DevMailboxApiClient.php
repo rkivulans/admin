@@ -46,7 +46,7 @@ class DevMailboxApiClient implements MailboxApiClientInterface
         return true;
     }
 
-    public function addOrUpdateMailAlias(string $address, string $forwards_to, ?string $permitted_senders = null, int $update_if_exists = 0)
+    public function addOrUpdateMailAlias(string $address, string $forwards_to, ?string $permitted_senders = null, int $updateIfExists = 0)
     {
         return true;
     }
