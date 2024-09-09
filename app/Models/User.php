@@ -21,6 +21,10 @@ class User extends Authenticatable
         'email',
         'domains',
         'password',
+        'max_emails',
+        'max_aliases',
+        'max_storage',
+        'max_domains',
     ];
 
     /**
