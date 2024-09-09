@@ -46,7 +46,7 @@
                         name="name"
                         type="text"
                         class="mt-1 block w-full"
-                        value="{{ $user->name}}"
+                        value="{{ old('name', $user->name) }}"
                     />
                     <x-input-error
                         :messages="$errors->get('name')"
@@ -61,7 +61,7 @@
                         name="max_emails"
                         type="number"
                         class="mt-1 block w-full"
-                        value="{{ $user->max_emails}}"
+                        value="{{ old('max_emails', $user->max_emails) }}"
                     />
                     <x-input-error
                         :messages="$errors->get('max_emails')"
@@ -76,7 +76,7 @@
                         name="max_aliases"
                         type="number"
                         class="mt-1 block w-full"
-                        value="{{ $user->max_aliases}}"
+                        value="{{ old('max_aliases', $user->max_aliases) }}"
                     />
                     <x-input-error
                         :messages="$errors->get('max_aliases')"
@@ -91,7 +91,7 @@
                         name="max_storage"
                         type="number"
                         class="mt-1 block w-full"
-                        value="{{ $user->max_storage}}"
+                        value="{{ old('max_storage', $user->max_storage) }}"
                     />
                     <x-input-error
                         :messages="$errors->get('max_storage')"
@@ -106,7 +106,7 @@
                         name="max_domains"
                         type="number"
                         class="mt-1 block w-full"
-                        value="{{ $user->max_domains}}"
+                        value="{{ old('max_domains', $user->max_domains) }}"
                     />
                     <x-input-error
                         :messages="$errors->get('max_domains')"

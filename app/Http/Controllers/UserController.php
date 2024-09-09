@@ -130,6 +130,10 @@ class UserController extends Controller
         $user->update([
             'name' => $validated['name'],
             'domains' => $validated['domains'] ?? [],
+            'max_emails' => $validated['max_emails'],
+            'max_aliases' => $validated['max_aliases'],
+            'max_storage' => $validated['max_storage'],
+            'max_domains' => $validated['max_domains'],
         ]);
 
         Cache::flush();
