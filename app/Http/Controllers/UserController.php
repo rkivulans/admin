@@ -48,6 +48,10 @@ class UserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'domains' => ['array'],
             'domains.*' => ['required', 'string'],
+            'max_emails' => 'required|integer',
+            'max_aliases' => 'required|integer',
+            'max_storage' => 'required|integer',
+            'max_domains' => 'required|integer',
         ]);
 
         if (! $this->mailService->getMailbox($validated['email'], ['*'])) {
@@ -101,6 +105,10 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'domains' => ['array'],
             'domains.*' => ['required', 'string'],
+            'max_emails' => 'required|integer',
+            'max_aliases' => 'required|integer',
+            'max_storage' => 'required|integer',
+            'max_domains' => 'required|integer',
         ]);
 
         if (isset($validated['domains'])) {

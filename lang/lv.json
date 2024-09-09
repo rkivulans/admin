@@ -80,6 +80,10 @@
     "Atleast one of domains doesn't exist in API": "Viens no domēniem API nēeksistē",
     "You have no permision to this domain!": "Jums nav pieejas šim domēnam!",
     "(You)": "(Jūs)",
+    "Max Emails": "Maksimālais epasta kastīšu skaits",
+    "Max Aliases": "Maksimālais pāradresāciju skaits",
+    "Max Storage": "Maksimālais datu apjoms GB",
+    "Max Domains": "Maksimālais domēnu skaits",
 
     "Zipper": "Rāvējslēdzis"
 }

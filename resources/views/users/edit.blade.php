@@ -55,6 +55,66 @@
                 </div>
 
                 <div>
+                    <x-input-label for="max_emails" :value="__('Max Emails')" />
+                    <x-text-input
+                        id="max_emails"
+                        name="max_emails"
+                        type="number"
+                        class="mt-1 block w-full"
+                        value="{{ $user->max_emails}}"
+                    />
+                    <x-input-error
+                        :messages="$errors->get('max_emails')"
+                        class="mt-2"
+                    />
+                </div>
+
+                <div>
+                    <x-input-label for="max_aliases" :value="__('Max Aliases')" />
+                    <x-text-input
+                        id="max_aliases"
+                        name="max_aliases"
+                        type="number"
+                        class="mt-1 block w-full"
+                        value="{{ $user->max_aliases}}"
+                    />
+                    <x-input-error
+                        :messages="$errors->get('max_aliases')"
+                        class="mt-2"
+                    />
+                </div>
+
+                <div>
+                    <x-input-label for="max_storage" :value="__('Max Storage')" />
+                    <x-text-input
+                        id="max_storage"
+                        name="max_storage"
+                        type="number"
+                        class="mt-1 block w-full"
+                        value="{{ $user->max_storage}}"
+                    />
+                    <x-input-error
+                        :messages="$errors->get('max_storage')"
+                        class="mt-2"
+                    />
+                </div>
+
+                <div>
+                    <x-input-label for="max_domains" :value="__('Max Domains')" />
+                    <x-text-input
+                        id="max_domains"
+                        name="max_domains"
+                        type="number"
+                        class="mt-1 block w-full"
+                        value="{{ $user->max_domains}}"
+                    />
+                    <x-input-error
+                        :messages="$errors->get('max_domains')"
+                        class="mt-2"
+                    />
+                </div>
+
+                <div>
                     <x-input-label :value="__('Domains')" class="mb-2" />
                     <fieldset>
                         <legend class="sr-only">__('Domains')</legend>
