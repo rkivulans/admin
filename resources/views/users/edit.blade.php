@@ -59,7 +59,9 @@
                     <x-text-input
                         id="max_emails"
                         name="max_emails"
-                        type="number"
+                        type="text"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
                         class="mt-1 block w-full"
                         value="{{ old('max_emails', $user->max_emails) }}"
                     />
@@ -74,7 +76,9 @@
                     <x-text-input
                         id="max_aliases"
                         name="max_aliases"
-                        type="number"
+                        type="text"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
                         class="mt-1 block w-full"
                         value="{{ old('max_aliases', $user->max_aliases) }}"
                     />
@@ -89,7 +93,9 @@
                     <x-text-input
                         id="max_storage"
                         name="max_storage"
-                        type="number"
+                        type="text"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
                         class="mt-1 block w-full"
                         value="{{ old('max_storage', $user->max_storage) }}"
                     />
@@ -104,7 +110,9 @@
                     <x-text-input
                         id="max_domains"
                         name="max_domains"
-                        type="number"
+                        type="text"
+                        pattern="[0-9]*"
+                        inputmode="numeric"
                         class="mt-1 block w-full"
                         value="{{ old('max_domains', $user->max_domains) }}"
                     />
