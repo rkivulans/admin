@@ -28,7 +28,15 @@ class EmailController extends Controller
                 ->sortBy('email');
         });
 
-        return view('emails.index', compact('users'));
+        $domainCount = $users->groupBy(function ($user, int $key) {
+            return explode("@", $user->email, 2)[1];
+        })->count();
+
+        $userCount = $users->count();
+        
+        $storageCount = 512; // to do - get from api used
+
+        return view('emails.index', compact('users', 'domainCount', 'userCount', 'storageCount'));
     }
 
     public function create()

@@ -12,33 +12,44 @@
             </x-primary-button>
         </div>
 
-        <div>
-            <span class="text-sm text-gray-900">
-                @if (Auth::user()->max_emails > 0)
-                    {{ __('You have :max_emails Emails.', ['max_emails' => Auth::user()->max_emails]) }}
-                @elseif (Auth::user()->max_emails === null)
-                    {{ __("You have access to an unlimited number of Emails.") }}
-                @else
-                    {{ __("You don't have any Email.") }}
-                @endif<br>
-
-                @if (Auth::user()->max_storage > 0)
-                    {{ __('You have :max_storage GB', ['max_storage' => Auth::user()->max_storage]) }}
-                @elseif (Auth::user()->max_storage === null)
-                    {{ __("Unlimited data available to you.") }}
-                @else
-                    {{ __("You don't have any data.") }}
-                @endif<br>
-
-                @if (Auth::user()->max_domains > 0)
-                    {{ __('You have :max_domains Domains.', ['max_domains' => Auth::user()->max_domains]) }}
-                @elseif (Auth::user()->max_domains === null)
-                    {{ __("Unlimited domains available to you.") }}
-                @else
-                    {{ __("You don't have any Domains.") }}
-                @endif
-            </span>
-        </div>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                <dt class="truncate text-sm font-medium text-gray-500">{{ __("Mailboxes") }}</dt>
+                    <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                        @if (Auth::user()->max_emails > 0)
+                            {{ $userCount }} / {{ Auth::user()->max_emails }}
+                        @elseif (Auth::user()->max_emails === null)
+                            {{ $userCount }} / ∞
+                        @else
+                            {{ $userCount }} / 🚫
+                        @endif
+                    </dd>
+            </div>
+            <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                <dt class="truncate text-sm font-medium text-gray-500">{{ __("Data volume") }}</dt>
+                    <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                        @if (Auth::user()->max_storage > 0)
+                            {{ Auth::user()->max_storage }} GB
+                        @elseif (Auth::user()->max_storage === null)
+                            ∞
+                        @else
+                            🚫
+                        @endif
+                    </dd>
+            </div>
+            <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                <dt class="truncate text-sm font-medium text-gray-500">{{ __("Domains") }}</dt>
+                    <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+                        @if (Auth::user()->max_domains > 0)
+                            {{ $domainCount }} / {{ Auth::user()->max_domains }}
+                        @elseif (Auth::user()->max_domains === null)
+                            {{ $domainCount }} / ∞
+                        @else
+                            {{ $domainCount }} / 🚫
+                        @endif
+                    </dd>
+            </div>
+        </dl>
 
         <div class="mt-8 w-full rounded-lg ring-1 ring-slate-900/10 bg-white">
             @foreach ($users->groupBy(function ($user, int $key) {

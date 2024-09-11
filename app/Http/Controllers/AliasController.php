@@ -28,7 +28,9 @@ class AliasController extends Controller
                 ->sortBy('address');
         });
 
-        return view('aliases.index', compact('aliases'));
+        $aliasCount = $aliases->count();
+
+        return view('aliases.index', compact('aliases', 'aliasCount'));
     }
 
     public function create()
