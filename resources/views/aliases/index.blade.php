@@ -12,6 +12,22 @@
             </x-primary-button>
         </div>
 
+        <div>
+            @if (Auth::user()->max_aliases > 0)
+                <span class="text-sm text-gray-900">
+                   {{ __('You have :max_aliases Aliases.', ['max_aliases' => Auth::user()->max_aliases]) }}
+                </span>
+            @elseif (Auth::user()->max_aliases === null)
+                <span class="text-sm text-gray-900">
+                    {{ __("Unlimited number of Aliases available to you.") }}
+                </span>
+            @else
+                <span class="text-sm text-gray-900">
+                    {{ __("No Aliases are available for you.") }}
+                </span>
+            @endif
+        </div>
+
         <div class="mt-8 w-full rounded-lg ring-1 ring-slate-900/10 bg-white">
             @foreach ($aliases->groupBy(function ($alias, int $key) {
                     return explode("@", $alias->address_display, 2)[1];
