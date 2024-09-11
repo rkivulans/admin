@@ -13,47 +13,31 @@
         </div>
 
         <div>
-            @if (Auth::user()->max_emails > 0)
-                <span class="text-sm text-gray-900">
+            <span class="text-sm text-gray-900">
+                @if (Auth::user()->max_emails > 0)
                     {{ __('You have :max_emails Emails.', ['max_emails' => Auth::user()->max_emails]) }}
-                </span>
-            @elseif (Auth::user()->max_emails === null)
-                <span class="text-sm text-gray-900">
+                @elseif (Auth::user()->max_emails === null)
                     {{ __("You have access to an unlimited number of Emails.") }}
-                </span>
-            @else
-                <span class="text-sm text-gray-900">
+                @else
                     {{ __("You don't have any Email.") }}
-                </span>
-            @endif<br>
+                @endif<br>
 
-            @if (Auth::user()->max_storage > 0)
-                <span class="text-sm text-gray-900">
+                @if (Auth::user()->max_storage > 0)
                     {{ __('You have :max_storage GB', ['max_storage' => Auth::user()->max_storage]) }}
-                </span>
-            @elseif (Auth::user()->max_storage === null)
-                <span class="text-sm text-gray-900">
+                @elseif (Auth::user()->max_storage === null)
                     {{ __("Unlimited data available to you.") }}
-                </span>
-            @else
-                <span class="text-sm text-gray-900">
+                @else
                     {{ __("You don't have any data.") }}
-                </span>
-            @endif<br>
+                @endif<br>
 
-            @if (Auth::user()->max_domains > 0)
-                <span class="text-sm text-gray-900">
+                @if (Auth::user()->max_domains > 0)
                     {{ __('You have :max_domains Domains.', ['max_domains' => Auth::user()->max_domains]) }}
-                </span>
-            @elseif (Auth::user()->max_domains === null)
-                <span class="text-sm text-gray-900">
+                @elseif (Auth::user()->max_domains === null)
                     {{ __("Unlimited domains available to you.") }}
-                </span>
-            @else
-                <span class="text-sm text-gray-900">
+                @else
                     {{ __("You don't have any Domains.") }}
-                </span>
-            @endif
+                @endif
+            </span>
         </div>
 
         <div class="mt-8 w-full rounded-lg ring-1 ring-slate-900/10 bg-white">
